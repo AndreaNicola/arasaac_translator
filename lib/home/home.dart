@@ -1,18 +1,19 @@
-import 'package:arasaac_translator/arasaac_service.dart';
-import 'package:arasaac_translator/edit_text_dialog.dart';
-import 'package:arasaac_translator/pictogram_card.dart';
+import 'package:arasaac_translator/arasaac/service.dart';
+import 'package:arasaac_translator/custom_pictograms/custom_pictograms_page.dart';
+import 'package:arasaac_translator/home/pictogram_card.dart';
+import 'package:arasaac_translator/utils/edit_text_dialog.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   final List<List<TranslationResponse>> _translationResponses = [];
   static const double _cardSize = 100;
@@ -27,6 +28,43 @@ class _MyHomePageState extends State<MyHomePage> {
     var cardNumber = MediaQuery.of(context).size.width ~/ _cardSize;
 
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.deepPurple,
+              ),
+              child: Text('Arasaac Translator'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: Text(AppLocalizations.of(context)!.customPictograms),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomPictogramsPage()));
+              },
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {},
+            heroTag: 'print',
+            child: const Icon(Icons.print),
+          ),
+          const SizedBox(
+            width: 15,
+          ),
+          FloatingActionButton(
+            onPressed: () {},
+            heroTag: 'save',
+            child: const Icon(Icons.save),
+          ),
+        ],
+      ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(AppLocalizations.of(context)!.title),
@@ -47,9 +85,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   'translation-debounce', // <-- An ID for this particular debouncer
                   const Duration(milliseconds: 1000), // <-- The debounce duration
                   () async {
-                    value = value.toUpperCase();
+                _controller.text = value.toUpperCase();
                     final Locale locale = Localizations.localeOf(context);
-                    var translationResponses = await ArasaacService().translateText(locale, value);
+                    var translationResponses = await ArasaacService().translateText(locale, _controller.text);
                     setState(() {
                       _translationResponses.clear();
                       _translationResponses.addAll(translationResponses);
@@ -87,14 +125,16 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: _cardSize,
                             width: 100,
                             child: PictogramCard(
-                              id: _translationResponses[listIndex][gridIndex].pictogramId ?? 0,
+                              id: _translationResponses[listIndex][gridIndex].pictogramId,
+                              customPictogramId: _translationResponses[listIndex][gridIndex].customPictogramId,
                               text: _translationResponses[listIndex][gridIndex].text,
                               error: _translationResponses[listIndex][gridIndex].error,
                             ),
                           ),
                           child: SizedBox(
                             child: PictogramCard(
-                              id: _translationResponses[listIndex][gridIndex].pictogramId ?? 0,
+                              id: _translationResponses[listIndex][gridIndex].pictogramId,
+                              customPictogramId: _translationResponses[listIndex][gridIndex].customPictogramId,
                               text: _translationResponses[listIndex][gridIndex].text,
                               error: _translationResponses[listIndex][gridIndex].error,
                               onTap: () {

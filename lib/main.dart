@@ -1,13 +1,12 @@
-import 'package:arasaac_translator/home.dart';
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:arasaac_translator/custom_pictograms/custom_pictograms_page.dart';
+import 'package:arasaac_translator/custom_pictograms/edit_custom_pictogram_page.dart';
+import 'package:arasaac_translator/home/home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 15));
   runApp(const MyApp());
 }
 
@@ -33,9 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: const HomePage(),
     );
   }
 }
-
-

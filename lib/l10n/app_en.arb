@@ -23,9 +23,13 @@
       }
     }
   },
-  "title" : "Arasaac translator",
-  "enterText" : "Enter text to translate",
-  "editText" : "Edit text",
-  "cancel" : "Cancel",
-  "save" : "Save"
+  "title": "Arasaac translator",
+  "enterText": "Enter text to translate",
+  "editText": "Edit text",
+  "cancel": "Cancel",
+  "save": "Save",
+  "customPictograms": "Custom pictograms",
+  "newCustomPictogram": "New custom pictogram",
+  "noCustomPictograms": "You don''t have any custom pictogram yet",
+  "newCustomPictogramKey" : "New custom pictogram word"
 }

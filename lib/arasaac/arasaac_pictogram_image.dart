@@ -33,7 +33,7 @@ enum SkinColor {
   const SkinColor(this.color);
 }
 
-class Pictogram extends StatelessWidget {
+class ArasaacPictogramImage extends StatelessWidget {
 
   final num id;
   final VerbalTense? action;
@@ -44,7 +44,7 @@ class Pictogram extends StatelessWidget {
 
 
 
-  const Pictogram({
+  const ArasaacPictogramImage({
     super.key,
     required this.id,
     this.action,

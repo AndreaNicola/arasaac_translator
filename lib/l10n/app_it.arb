@@ -1,11 +1,14 @@
 {
-    "helloWorld": "Ciao Mondo!",
-    "hello": "Ciao {userName}",
-    "nWombats": "{count, plural, =0{Nessun wombato} =1{1 wombato} other{{count} wombati}}",
-    "title" : "Traduttore arasaac",
-    "enterText" : "Inserisci il testo da tradurre",
-    "editText" : "Modifica il testo",
-    "cancel" : "Annulla",
-    "save" : "Salva"
-
+  "helloWorld": "Ciao Mondo!",
+  "hello": "Ciao {userName}",
+  "nWombats": "{count, plural, =0{Nessun wombato} =1{1 wombato} other{{count} wombati}}",
+  "title": "Traduttore arasaac",
+  "enterText": "Inserisci il testo da tradurre",
+  "editText": "Modifica il testo",
+  "cancel": "Annulla",
+  "save": "Salva",
+  "customPictograms": "Pittogrammi personalizzati",
+  "newCustomPictogram": "Nuovo pittogramma personalizzato",
+  "noCustomPictograms": "Non hai ancora inserito pittogrammi personalizzati",
+  "newCustomPictogramKey" : "Inserisci la parola del nuovo pittogramma"
 }
