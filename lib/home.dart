@@ -1,4 +1,5 @@
 import 'package:arasaac_translator/arasaac_service.dart';
+import 'package:arasaac_translator/edit_text_dialog.dart';
 import 'package:arasaac_translator/pictogram_card.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _controller = TextEditingController();
-  final List<TranslationResponse> _translationResponses = [];
+  final List<List<TranslationResponse>> _translationResponses = [];
+  static const double _cardSize = 100;
 
   @override
   void initState() {
@@ -22,6 +24,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var cardNumber = MediaQuery.of(context).size.width ~/ _cardSize;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -45,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   () async {
                     value = value.toUpperCase();
                     final Locale locale = Localizations.localeOf(context);
-                    var translationResponses = await ArasaacService().translate(locale, value);
+                    var translationResponses = await ArasaacService().translateText(locale, value);
                     setState(() {
                       _translationResponses.clear();
                       _translationResponses.addAll(translationResponses);
@@ -55,20 +59,65 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
           ),
-          GridView(
-            padding: const EdgeInsets.all(8),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 8),
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            children: [
-              for (var translationResponse in _translationResponses)
-                PictogramCard(
-                  id: translationResponse.pictogramId ?? 0,
-                  text: translationResponse.text,
-                  error: translationResponse.error,
-                ),
-            ],
-          ),
+          ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, listIndex) {
+                return GridView.builder(
+                  itemCount: _translationResponses[listIndex].length,
+                  itemBuilder: (context, gridIndex) {
+                    return DragTarget<TranslationResponse>(
+                      onWillAccept: (TranslationResponse? data) {
+                        return data!.index != _translationResponses[listIndex][gridIndex].index;
+                      },
+                      onAccept: (TranslationResponse? data) {
+                        setState(() {
+                          if (data!.index < _translationResponses[listIndex][gridIndex].index) {
+                            _translationResponses[listIndex][gridIndex].text = "${data.text} ${_translationResponses[listIndex][gridIndex].text}";
+                          } else {
+                            _translationResponses[listIndex][gridIndex].text = "${_translationResponses[listIndex][gridIndex].text} ${data.text}";
+                          }
+                          _translationResponses[listIndex].removeWhere((element) => element.index == data.index);
+                        });
+                      },
+                      builder: (BuildContext context, List<TranslationResponse?> candidateData, List<dynamic> rejectedData) {
+                        return Draggable<TranslationResponse>(
+                          data: _translationResponses[listIndex][gridIndex],
+                          feedback: SizedBox(
+                            height: _cardSize,
+                            width: 100,
+                            child: PictogramCard(
+                              id: _translationResponses[listIndex][gridIndex].pictogramId ?? 0,
+                              text: _translationResponses[listIndex][gridIndex].text,
+                              error: _translationResponses[listIndex][gridIndex].error,
+                            ),
+                          ),
+                          child: SizedBox(
+                            child: PictogramCard(
+                              id: _translationResponses[listIndex][gridIndex].pictogramId ?? 0,
+                              text: _translationResponses[listIndex][gridIndex].text,
+                              error: _translationResponses[listIndex][gridIndex].error,
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => EditTextDialog(
+                                        initialText: _translationResponses[listIndex][gridIndex].text,
+                                        onSaved: (newText) => setState(() => _translationResponses[listIndex][gridIndex].text = newText)));
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  padding: const EdgeInsets.all(8),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: cardNumber, mainAxisSpacing: 8, crossAxisSpacing: 8),
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                );
+              },
+              separatorBuilder: (context, _) => const Divider(),
+              itemCount: _translationResponses.length)
         ],
       ),
     );

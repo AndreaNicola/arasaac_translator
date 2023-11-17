@@ -85,7 +85,7 @@ class Pictogram extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FastCachedImage(url: _buildUri(), fit: BoxFit.contain);
+    return Image.network(_buildUri());
   }
 
 

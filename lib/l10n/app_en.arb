@@ -24,5 +24,8 @@
     }
   },
   "title" : "Arasaac translator",
-  "enterText" : "Enter text to translate"
+  "enterText" : "Enter text to translate",
+  "editText" : "Edit text",
+  "cancel" : "Cancel",
+  "save" : "Save"
 }

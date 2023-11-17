@@ -3,6 +3,9 @@
     "hello": "Ciao {userName}",
     "nWombats": "{count, plural, =0{Nessun wombato} =1{1 wombato} other{{count} wombati}}",
     "title" : "Traduttore arasaac",
-    "enterText" : "Inserisci il testo da tradurre"
+    "enterText" : "Inserisci il testo da tradurre",
+    "editText" : "Modifica il testo",
+    "cancel" : "Annulla",
+    "save" : "Salva"
 
 }

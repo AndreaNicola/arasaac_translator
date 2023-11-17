@@ -2,11 +2,12 @@ import 'package:arasaac_api/arasaac_api.dart';
 import 'package:flutter/cupertino.dart';
 
 class TranslationResponse {
-  final String text;
-  final num? pictogramId;
-  final bool error;
+   String text;
+   num? pictogramId;
+   bool error;
+   int index;
 
-  const TranslationResponse({required this.text, this.pictogramId, this.error = false});
+   TranslationResponse({required this.index, required this.text, this.pictogramId, this.error = false});
 }
 
 class ArasaacService {
@@ -21,18 +22,34 @@ class ArasaacService {
     _api = ArasaacApi();
   }
 
-  Future<List<TranslationResponse>> translate(Locale locale, String text) async {
-    final asaraacLocale = Locales.valueOf(locale.languageCode);
-    final separators = RegExp(r"[ ,.;]");
-    final parts = text.split(separators);
+  Future<List<List<TranslationResponse>>> translateText(Locale locale, String text) async {
 
+
+    var lines = text.trim().split("\n");
+    List<List<TranslationResponse>> translationResponses = [];
+    for (var line in lines) {
+      var translationResponse = await _translateString(locale, line);
+      translationResponses.add(translationResponse);
+    }
+    return translationResponses;
+  }
+
+  Future<List<TranslationResponse>> _translateString(Locale locale, String text) async {
+    final asaraacLocale = Locales.valueOf(locale.languageCode);
     List<TranslationResponse> translationResponses = [];
+
+    final separators = RegExp(r"[ ,\.;]");
+    final parts = text.trim().split(separators);
+     parts.removeWhere((element) => element.isEmpty);
+
+
+    var index = 0;
     for (var part in parts) {
       try {
         var response = await _api.getPictogramsApi().bestSearchPictograms(language: asaraacLocale, searchText: part);
-        translationResponses.add(TranslationResponse(text: part, pictogramId: response.data!.first.id));
+        translationResponses.add(TranslationResponse(index: index++, text: part, pictogramId: response.data!.first.id));
       } catch (e) {
-        translationResponses.add(TranslationResponse(text: part, error: true));
+        translationResponses.add(TranslationResponse(index: index++, text: part, error: true));
       }
     }
 
