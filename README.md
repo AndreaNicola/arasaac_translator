@@ -1,16 +1,40 @@
-# arasaac_translator
+# Arasaac Translator
 
-A new Flutter project.
+Arasaac Translator is a project that allows users to translate text into pictograms using the Arasaac API.
+
+## Languages and Frameworks Used
+
+- Kotlin
+- Java
+- Dart
+- Gradle
+- Pub
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-A few resources to get you started if this is your first Flutter project:
+### Prerequisites
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+What things you need to install the software and how to install them:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Android Studio
+- Dart SDK
+- Flutter SDK
+
+### Installing
+
+A step by step series of examples that tell you how to get a development environment running:
+
+1. Clone the repository
+2. Open the project in Android Studio
+3. Run `flutter pub get` to install dependencies
+4. Build and run the project
+
+## Running the tests
+
+Explain how to run the automated tests for this system.
+
+## License
+
+This project is licensed under the CC BY-NC-SA 4.0 License - see the [LICENSE.md](LICENSE.md) file for details
