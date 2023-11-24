@@ -13,5 +13,7 @@
   "newCustomPictogramKey": "Inserisci la parola del nuovo pittogramma",
   "savedTranslations": "Traduzioni salvate",
   "noSavedTranslations": "Non hai ancora salvato nessuna traduzione",
-  "saveTranslationName" : "Salva la traduzione come..."
+  "saveTranslationName": "Salva la traduzione come...",
+  "about": "Informazioni su Arasaac Translator"
+
 }

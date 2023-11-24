@@ -70,36 +70,54 @@ class _HomePageState extends State<HomePage> {
                     ));
               },
             ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: Text(AppLocalizations.of(context)!.about),
+              onTap: () {
+                showAboutDialog(
+                  context: context,
+                  applicationName: 'Arasaac Translator',
+                  applicationVersion: '0.0.1',
+                  applicationIcon: const Icon(Icons.translate),
+                  children: [
+                    Text(AppLocalizations.of(context)!.aboutText),
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            onPressed: () {},
-            heroTag: 'print',
-            child: const Icon(Icons.print),
-          ),
+          if (_translationResponses.isNotEmpty)
+            FloatingActionButton(
+              onPressed: () {},
+              heroTag: 'print',
+              child: const Icon(Icons.print),
+            ),
           const SizedBox(
             width: 15,
           ),
-          FloatingActionButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => EditTextDialog(
-                  title: AppLocalizations.of(context)!.saveTranslationName,
-                  initialText: translationName,
-                  onSaved: (translationName) async {
-                    await SavedTranslationsRepository.instance.save(translationName, _controller.text, _translationResponses);
-                  },
-                ),
-              );
-            },
-            heroTag: 'save',
-            child: const Icon(Icons.save),
-          ),
+          if (_translationResponses.isNotEmpty)
+            FloatingActionButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => EditTextDialog(
+                    title: AppLocalizations.of(context)!.saveTranslationName,
+                    initialText: translationName,
+                    onSaved: (translationName) async {
+                      await SavedTranslationsRepository.instance.save(translationName, _controller.text, _translationResponses);
+                    },
+                  ),
+                );
+              },
+              heroTag: 'save',
+              child: const Icon(Icons.save),
+            ),
         ],
       ),
       appBar: AppBar(
@@ -107,7 +125,7 @@ class _HomePageState extends State<HomePage> {
         title: Text(AppLocalizations.of(context)!.title),
       ),
       body: ListView(
-        padding: EdgeInsets.only(bottom: 75),
+        padding: const EdgeInsets.only(bottom: 75),
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8),
