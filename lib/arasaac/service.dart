@@ -3,18 +3,36 @@ import 'package:arasaac_translator/arasaac/model.dart';
 import 'package:arasaac_translator/custom_pictograms/custom_pictogram_repository.dart';
 import 'package:flutter/cupertino.dart';
 
+/// A service class for interacting with the Arasaac API.
+///
+/// This class provides methods for translating text into pictograms using the Arasaac API.
+/// It uses the singleton pattern to ensure that only one instance of the class is created.
 class ArasaacService {
+  /// The singleton instance of the `ArasaacService` class.
   static final ArasaacService _instance = ArasaacService._internal();
+
+  /// The `ArasaacApi` instance used to interact with the Arasaac API.
   late ArasaacApi _api;
 
+  /// The factory constructor for the `ArasaacService` class.
+  ///
+  /// This constructor returns the singleton instance of the `ArasaacService` class.
   factory ArasaacService() {
     return _instance;
   }
 
+  /// The private constructor for the `ArasaacService` class.
+  ///
+  /// This constructor initializes the `_api` property with a new `ArasaacApi` instance.
   ArasaacService._internal() {
     _api = ArasaacApi();
   }
 
+  /// Translates a text into a list of lists of `TranslationResponse` instances.
+  ///
+  /// This method takes a `locale` and a `text` as parameters.
+  /// It splits the `text` into lines and translates each line into a list of `TranslationResponse` instances.
+  /// It returns a list of these lists.
   Future<List<List<TranslationResponse>>> translateText(Locale locale, String text) async {
     var lines = text.toUpperCase().trim().split("\n");
     List<List<TranslationResponse>> translationResponses = [];
@@ -25,6 +43,12 @@ class ArasaacService {
     return translationResponses;
   }
 
+  /// Translates a string into a list of `TranslationResponse` instances.
+  ///
+  /// This method is private and is used by the `translateText` method.
+  /// It takes a `locale` and a `text` as parameters.
+  /// It splits the `text` into parts and translates each part into a `TranslationResponse` instance.
+  /// It returns a list of these instances.
   Future<List<TranslationResponse>> _translateString(Locale locale, String text) async {
     final asaraacLocale = Locales.valueOf(locale.languageCode);
     List<TranslationResponse> translationResponses = [];

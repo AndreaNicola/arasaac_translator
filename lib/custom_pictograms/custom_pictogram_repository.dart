@@ -2,12 +2,26 @@ import 'package:arasaac_translator/custom_pictograms/model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+/// A repository class for managing custom pictograms.
+///
+/// This class provides methods for interacting with the custom pictograms database.
+/// It uses the singleton pattern to ensure that only one instance of the class is created.
 class CustomPictogramRepository {
+  /// The singleton instance of the `CustomPictogramRepository` class.
   static final CustomPictogramRepository instance = CustomPictogramRepository._internal();
+
+  /// The `Database` instance used to interact with the custom pictograms database.
   static Database? _db;
 
+  /// The private constructor for the `CustomPictogramRepository` class.
+  ///
+  /// This constructor is used to create the singleton instance of the class.
   CustomPictogramRepository._internal();
 
+  /// Returns the `Database` instance used to interact with the custom pictograms database.
+  ///
+  /// If the `Database` instance has not been created yet, it is created and returned.
+  /// If the `Database` instance has already been created, it is returned.
   static Future<Database> _database() async {
     return _db ??= await openDatabase(
       join(await getDatabasesPath(), 'custom_pictograms_database.db'),
@@ -20,12 +34,14 @@ class CustomPictogramRepository {
     );
   }
 
+  /// Returns a list of all custom pictograms in the database.
+  ///
+  /// Each custom pictogram is represented as a `CustomPictogram` instance.
   Future<List<CustomPictogram>> list() async {
     final db = await _database();
 
     final List<Map<String, dynamic>> maps = await db.query('custom_pictograms');
 
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
     return List.generate(maps.length, (i) {
       return CustomPictogram(
         id: maps[i]['id'],
@@ -35,6 +51,9 @@ class CustomPictogramRepository {
     });
   }
 
+  /// Inserts a custom pictogram into the database.
+  ///
+  /// The custom pictogram is represented as a `CustomPictogram` instance.
   Future<void> insert(CustomPictogram cp) async {
     final db = await _database();
     await db.insert(
@@ -44,14 +63,15 @@ class CustomPictogramRepository {
     );
   }
 
+  /// Returns a custom pictogram from the database by id.
+  ///
+  /// The id is used to query the database for the custom pictogram.
+  /// The custom pictogram is represented as a `CustomPictogram` instance.
   Future<CustomPictogram> get(int id) async {
-    // Get a reference to the database.
     final db = await _database();
 
-    // Query the table for all The CustomPictograms.
     final List<Map<String, dynamic>> maps = await db.query('custom_pictograms', where: "id = ?", whereArgs: [id]);
 
-    // Convert the List<Map<String, dynamic> into a List<CustomPictogram>.
     return CustomPictogram(
       id: maps.first['id'],
       key: maps.first['key'],
@@ -59,18 +79,20 @@ class CustomPictogramRepository {
     );
   }
 
+  /// Returns a custom pictogram from the database by key.
+  ///
+  /// The key is used to query the database for the custom pictogram.
+  /// If a custom pictogram with the given key is found, it is represented as a `CustomPictogram` instance and returned.
+  /// If a custom pictogram with the given key is not found, null is returned.
   Future<CustomPictogram?> getFirstByKeyOrNull(String key) async {
-    // Get a reference to the database.
     final db = await _database();
 
-    // Query the table for all The CustomPictograms.
     final List<Map<String, dynamic>> maps = await db.query('custom_pictograms', where: "key = ?", whereArgs: [key]);
 
     if (maps.isEmpty) {
       return null;
     }
 
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
     return CustomPictogram(
       id: maps.first['id'],
       key: maps.first['key'],

@@ -5,16 +5,31 @@ import 'package:arasaac_translator/home/pictogram_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// A widget that displays a page for managing custom pictograms.
+///
+/// This widget is a `StatefulWidget` that maintains a list of custom pictograms.
+/// The list of custom pictograms is fetched from the `CustomPictogramRepository` when the widget is initialized.
+/// The widget provides a user interface for adding and editing custom pictograms.
 class CustomPictogramsPage extends StatefulWidget {
+  /// Constructs a `CustomPictogramsPage` instance.
   const CustomPictogramsPage({super.key});
 
+  /// Creates the mutable state for this widget.
   @override
   State<StatefulWidget> createState() => _CustomPictogramsPageState();
 }
 
+/// The mutable state for a `CustomPictogramsPage` widget.
+///
+/// This class fetches the list of custom pictograms from the `CustomPictogramRepository` when it is initialized.
+/// It provides a user interface for displaying the list of custom pictograms and for navigating to the `EditCustomPictogramPage` widget.
 class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
+  /// The list of custom pictograms.
   List<CustomPictogram> customPictograms = [];
 
+  /// Initializes the state.
+  ///
+  /// This method fetches the list of custom pictograms from the `CustomPictogramRepository` and updates the state.
   @override
   void initState() {
     super.initState();
@@ -25,6 +40,10 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
     });
   }
 
+  /// Builds the widget.
+  ///
+  /// This method returns a `Scaffold` widget that provides a user interface for managing custom pictograms.
+  /// The `Scaffold` widget contains a `FloatingActionButton` for navigating to the `EditCustomPictogramPage` widget and a `GridView` for displaying the list of custom pictograms.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
