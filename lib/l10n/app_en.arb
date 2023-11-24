@@ -1,28 +1,4 @@
 {
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  },
-  "hello": "Hello {userName}",
-  "@hello": {
-    "description": "A message with a single parameter",
-    "placeholders": {
-      "userName": {
-        "type": "String",
-        "example": "Bob"
-      }
-    }
-  },
-  "nWombats": "{count, plural, =0{no wombats} =1{1 wombat} other{{count} wombats}}",
-  "@nWombats": {
-    "description": "A plural message",
-    "placeholders": {
-      "count": {
-        "type": "num",
-        "format": "compact"
-      }
-    }
-  },
   "title": "Arasaac translator",
   "enterText": "Enter text to translate",
   "editText": "Edit text",
@@ -36,5 +12,7 @@
   "noSavedTranslations": "You don''t have any saved translation yet",
   "saveTranslationName" : "Save translation as...",
   "about": "About Arasaac Translator",
-  "aboutText" : "Arasaac Translator is a free tool to translate text to pictograms. It uses the Arasaac pictogram set, which is licensed under Creative Commons BY-NC-SA 3.0. You can find more information about Arasaac at http://arasaac.org"
+  "aboutText" : "Arasaac Translator is a free tool to translate text to pictograms. It uses the Arasaac pictogram set, which is licensed under Creative Commons BY-NC-SA 3.0. You can find more information about Arasaac at http://arasaac.org",
+  "confirm": "Confirm",
+  "areYouSure": "Are you sure you want to delete this translation?"
 }

@@ -21,13 +21,26 @@ class SavedTranslationsRepository {
     );
   }
 
-  Future<List<SavedTranslation>> list() async {
-    final db = await _database();
-    final List<Map<String, dynamic>> maps = await db.query('translations');
-    return List.generate(maps.length, (i) {
-      return SavedTranslation.fromJson(maps[i]);
-    });
-  }
+/// Retrieves a list of all saved translations from the database.
+///
+/// This method asynchronously retrieves all saved translations from the database
+/// and returns them as a list of [SavedTranslation] objects.
+///
+/// It first gets a reference to the database by calling the [_database] method.
+/// Then it queries the 'translations' table in the database and gets a list of maps,
+/// where each map represents a row in the table.
+///
+/// Finally, it generates a list of [SavedTranslation] objects from the list of maps
+/// by calling the [SavedTranslation.fromJson] factory method for each map.
+///
+/// Returns a [Future] that completes with a list of [SavedTranslation] objects.
+Future<List<SavedTranslation>> list() async {
+  final db = await _database();
+  final List<Map<String, dynamic>> maps = await db.query('translations', orderBy: 'name');
+  return List.generate(maps.length, (i) {
+    return SavedTranslation.fromJson(maps[i]);
+  });
+}
 
   Future<void> save(String name, String originalText, List<List<TranslationResponse>> translationResponses) async {
     final encodedTranslation = jsonEncode(translationResponses);
@@ -43,4 +56,14 @@ class SavedTranslationsRepository {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  Future<void> delete(String name) async {
+    final db = await _database();
+    await db.delete(
+      'translations',
+      where: "name = ?",
+      whereArgs: [name],
+    );
+  }
+
 }
