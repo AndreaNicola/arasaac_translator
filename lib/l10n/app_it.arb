@@ -10,5 +10,8 @@
   "customPictograms": "Pittogrammi personalizzati",
   "newCustomPictogram": "Nuovo pittogramma personalizzato",
   "noCustomPictograms": "Non hai ancora inserito pittogrammi personalizzati",
-  "newCustomPictogramKey" : "Inserisci la parola del nuovo pittogramma"
+  "newCustomPictogramKey": "Inserisci la parola del nuovo pittogramma",
+  "savedTranslations": "Traduzioni salvate",
+  "noSavedTranslations": "Non hai ancora salvato nessuna traduzione",
+  "saveTranslationName" : "Salva la traduzione come..."
 }

@@ -1,16 +1,7 @@
 import 'package:arasaac_api/arasaac_api.dart';
-import 'package:arasaac_translator/custom_pictograms/repository.dart';
+import 'package:arasaac_translator/arasaac/model.dart';
+import 'package:arasaac_translator/custom_pictograms/custom_pictogram_repository.dart';
 import 'package:flutter/cupertino.dart';
-
-class TranslationResponse {
-   String text;
-   int? pictogramId;
-   int? customPictogramId;
-   bool error;
-   int index;
-
-   TranslationResponse({required this.index, required this.text, this.pictogramId, this.customPictogramId, this.error = false});
-}
 
 class ArasaacService {
   static final ArasaacService _instance = ArasaacService._internal();
@@ -25,8 +16,6 @@ class ArasaacService {
   }
 
   Future<List<List<TranslationResponse>>> translateText(Locale locale, String text) async {
-
-
     var lines = text.toUpperCase().trim().split("\n");
     List<List<TranslationResponse>> translationResponses = [];
     for (var line in lines) {
@@ -42,13 +31,11 @@ class ArasaacService {
 
     final separators = RegExp(r"[ ,\.;]");
     final parts = text.trim().split(separators);
-     parts.removeWhere((element) => element.isEmpty);
-
+    parts.removeWhere((element) => element.isEmpty);
 
     var index = 0;
     for (var part in parts) {
       try {
-
         var customPictogram = await CustomPictogramRepository.instance.getFirstByKeyOrNull(part);
         if (customPictogram != null) {
           translationResponses.add(TranslationResponse(index: index++, text: part, customPictogramId: customPictogram.id));
@@ -64,5 +51,4 @@ class ArasaacService {
 
     return translationResponses;
   }
-
 }

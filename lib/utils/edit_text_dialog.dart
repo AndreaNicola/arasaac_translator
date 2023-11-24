@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditTextDialog extends StatefulWidget {
-
   final String initialText;
   final Function(String) onSaved;
+  final String title;
 
-  const EditTextDialog({super.key, required this.initialText, required this.onSaved});
+  const EditTextDialog({super.key, required this.initialText, required this.onSaved, required this.title});
 
   @override
   State<StatefulWidget> createState() => _EditTextDialogState();
@@ -25,7 +25,7 @@ class _EditTextDialogState extends State<EditTextDialog> {
   Widget build(BuildContext context) {
     return SimpleDialog(
       contentPadding: const EdgeInsets.all(20),
-      title: Text(AppLocalizations.of(context)!.editText),
+      title: Text(widget.title),
       children: [
         // campo di testo per modificare il testo
         Padding(

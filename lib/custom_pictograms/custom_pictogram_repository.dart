@@ -21,7 +21,6 @@ class CustomPictogramRepository {
   }
 
   Future<List<CustomPictogram>> list() async {
-
     final db = await _database();
 
     final List<Map<String, dynamic>> maps = await db.query('custom_pictograms');
@@ -49,10 +48,10 @@ class CustomPictogramRepository {
     // Get a reference to the database.
     final db = await _database();
 
-    // Query the table for all The Dogs.
+    // Query the table for all The CustomPictograms.
     final List<Map<String, dynamic>> maps = await db.query('custom_pictograms', where: "id = ?", whereArgs: [id]);
 
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
+    // Convert the List<Map<String, dynamic> into a List<CustomPictogram>.
     return CustomPictogram(
       id: maps.first['id'],
       key: maps.first['key'],
@@ -64,7 +63,7 @@ class CustomPictogramRepository {
     // Get a reference to the database.
     final db = await _database();
 
-    // Query the table for all The Dogs.
+    // Query the table for all The CustomPictograms.
     final List<Map<String, dynamic>> maps = await db.query('custom_pictograms', where: "key = ?", whereArgs: [key]);
 
     if (maps.isEmpty) {

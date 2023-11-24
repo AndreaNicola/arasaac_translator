@@ -31,5 +31,8 @@
   "customPictograms": "Custom pictograms",
   "newCustomPictogram": "New custom pictogram",
   "noCustomPictograms": "You don''t have any custom pictogram yet",
-  "newCustomPictogramKey" : "New custom pictogram word"
+  "newCustomPictogramKey": "New custom pictogram word",
+  "savedTranslations": "Saved translations",
+  "noSavedTranslations": "You don''t have any saved translation yet",
+  "saveTranslationName" : "Save translation as..."
 }

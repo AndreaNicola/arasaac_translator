@@ -1,6 +1,6 @@
-import 'package:arasaac_translator/custom_pictograms/model.dart';
+import 'package:arasaac_translator/custom_pictograms/custom_pictogram_repository.dart';
 import 'package:arasaac_translator/custom_pictograms/edit_custom_pictogram_page.dart';
-import 'package:arasaac_translator/custom_pictograms/repository.dart';
+import 'package:arasaac_translator/custom_pictograms/model.dart';
 import 'package:arasaac_translator/home/pictogram_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,9 +33,9 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>  EditCustomPictogramPage(
-                  customPictogram: null,
-                  onSave:  (id, key, imageBytes) async {
+              builder: (context) => EditCustomPictogramPage(
+                customPictogram: null,
+                onSave: (id, key, imageBytes) async {
                   await CustomPictogramRepository.instance.insert(CustomPictogram(id: id, key: key, imageBytes: imageBytes));
                   var newCustomPictograms = await CustomPictogramRepository.instance.list();
                   setState(() {

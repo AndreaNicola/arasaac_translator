@@ -43,7 +43,6 @@ dependencies:
     sdk: flutter
   intl: any
   easy_debounce: ^2.0.3
-  fast_cached_network_image: ^1.2.0
   sqflite: ^2.3.0
   path: ^1.8.3
   image_picker: ^1.0.4

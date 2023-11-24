@@ -1,5 +1,3 @@
-import 'package:arasaac_translator/custom_pictograms/custom_pictograms_page.dart';
-import 'package:arasaac_translator/custom_pictograms/edit_custom_pictogram_page.dart';
 import 'package:arasaac_translator/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
