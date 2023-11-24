@@ -110,6 +110,9 @@ class _HomePageState extends State<HomePage> {
                     title: AppLocalizations.of(context)!.saveTranslationName,
                     initialText: translationName,
                     onSaved: (translationName) async {
+                      setState(() {
+                        this.translationName = translationName;
+                      });
                       await SavedTranslationsRepository.instance.save(translationName, _controller.text, _translationResponses);
                     },
                   ),
@@ -127,13 +130,17 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         padding: const EdgeInsets.only(bottom: 75),
         children: <Widget>[
+
           Padding(
             padding: const EdgeInsets.all(8),
             child: TextField(
               minLines: 3,
-              maxLines: 5,
+              maxLines: 10,
               controller: _controller,
               decoration: InputDecoration(
+                border: const OutlineInputBorder(
+
+                ),
                 labelText: AppLocalizations.of(context)!.enterText,
               ),
               onChanged: (String value) {
@@ -153,6 +160,13 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
+          if (_translationResponses.isNotEmpty)
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text("${AppLocalizations.of(context)!.loadedFrom} $translationName", style: Theme.of(context).textTheme.bodySmall, textAlign: TextAlign.center),
+              ),
+            ),
           ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
