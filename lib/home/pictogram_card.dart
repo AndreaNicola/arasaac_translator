@@ -23,8 +23,12 @@ class PictogramCard extends StatelessWidget {
   /// Indicates whether an error occurred.
   final bool error;
 
+  final bool selected;
+
   /// The callback to be called when the card is tapped. Can be null, in which case nothing happens when the card is tapped.
   final Function()? onTap;
+
+  final Function()? onLongPress;
 
   /// Creates an instance of [PictogramCard].
   ///
@@ -33,7 +37,8 @@ class PictogramCard extends StatelessWidget {
   /// The [customPictogramId] parameter is the id of the custom pictogram to be displayed.
   /// The [error] parameter indicates whether an error occurred.
   /// The [onTap] parameter is the callback to be called when the card is tapped.
-  const PictogramCard({super.key, required this.text, this.id, required this.error, this.onTap, this.customPictogramId});
+  const PictogramCard(
+      {super.key, required this.text, this.id, required this.error, required this.selected, this.onTap, this.onLongPress, this.customPictogramId});
 
   /// Builds the widget.
   ///
@@ -43,26 +48,37 @@ class PictogramCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        onTap: onTap,
+        onLongPress: onLongPress,
+        child: Stack(
+          fit: StackFit.expand,
           children: [
-            if (id != null && id != 0) Expanded(child: ArasaacPictogramImage(id: id!)),
-            if (customPictogramId != null && customPictogramId != 0) Expanded(child: CustomPictogramImage(customPictogramId: customPictogramId!)),
-            Text(
-              text,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.visible,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
+            Card(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (id != null && id != 0) Expanded(child: ArasaacPictogramImage(id: id!)),
+                  if (customPictogramId != null && customPictogramId != 0) Expanded(child: CustomPictogramImage(customPictogramId: customPictogramId!)),
+                  Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.visible,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
             ),
+            if (selected)
+              const Positioned(
+                top: 0,
+                right: 0,
+                child: Icon(Icons.check_circle, color: Colors.green),
+              ),
           ],
-        ),
-      ),
-    );
+        ));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:arasaac_translator/arasaac/arasaac_pictogram_image.dart';
 import 'package:arasaac_translator/custom_pictograms/custom_pictogram_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -25,12 +26,16 @@ class CustomPictogramImage extends StatelessWidget {
       future: CustomPictogramRepository.instance.get(customPictogramId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Image.memory(
-            snapshot.data!.imageBytes,
-            width: 300,
-            height: 300,
-            fit: BoxFit.fitWidth,
-          );
+          if (snapshot.data!.imageBytes == null) {
+            return ArasaacPictogramImage(id: snapshot.data!.arasaacId!);
+          } else {
+            return Image.memory(
+              snapshot.data!.imageBytes!,
+              width: 300,
+              height: 300,
+              fit: BoxFit.fitWidth,
+            );
+          }
         } else {
           return const CircularProgressIndicator();
         }

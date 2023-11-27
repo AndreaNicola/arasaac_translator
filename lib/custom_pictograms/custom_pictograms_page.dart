@@ -55,7 +55,7 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
               builder: (context) => EditCustomPictogramPage(
                 customPictogram: null,
                 onSave: (id, key, imageBytes) async {
-                  await CustomPictogramRepository.instance.insert(CustomPictogram(id: id, key: key, imageBytes: imageBytes));
+                  await CustomPictogramRepository.instance.insert(CustomPictogram(id: id, key: key, imageBytes: imageBytes, arasaacId: null));
                   var newCustomPictograms = await CustomPictogramRepository.instance.list();
                   setState(() {
                     customPictograms.clear();
@@ -89,7 +89,7 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
                         builder: (context) => EditCustomPictogramPage(
                           customPictogram: customPictograms[index],
                           onSave: (id, key, imageBytes) async {
-                            await CustomPictogramRepository.instance.insert(CustomPictogram(id: id, key: key, imageBytes: imageBytes));
+                            await CustomPictogramRepository.instance.insert(CustomPictogram(id: id, key: key, imageBytes: imageBytes, arasaacId: null));
                             var newCustomPictograms = await CustomPictogramRepository.instance.list();
                             setState(() {
                               customPictograms.clear();
@@ -104,6 +104,7 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
                     text: customPictograms[index].key,
                     error: false,
                     customPictogramId: customPictograms[index].id,
+                    selected: false,
                   ),
                 );
               },

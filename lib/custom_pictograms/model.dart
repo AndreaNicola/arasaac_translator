@@ -14,14 +14,16 @@ class CustomPictogram {
   final String key;
 
   /// The image bytes of the pictogram.
-  final Uint8List imageBytes;
+  final Uint8List? imageBytes;
+
+  final int? arasaacId;
 
   /// Creates a new instance of [CustomPictogram].
   ///
   /// The [id] parameter is the id of the pictogram. It can be null for a new pictogram.
   /// The [key] parameter is the key of the pictogram. It must be unique.
   /// The [imageBytes] parameter are the image bytes of the pictogram.
-  CustomPictogram({required this.id, required this.key, required this.imageBytes});
+  CustomPictogram({required this.id, required this.key, required this.imageBytes, required this.arasaacId});
 
   /// Converts the pictogram to a map.
   ///
@@ -40,6 +42,6 @@ class CustomPictogram {
   /// The string contains the id, key, and the length of the image bytes of the pictogram.
   @override
   String toString() {
-    return 'CustomPictogram{id: $id, key: $key, image: ${imageBytes.length} bytes}';
+    return 'CustomPictogram{id: $id, key: $key, image: ${imageBytes?.length ?? 0} bytes, arasaacId: $arasaacId}';
   }
 }

@@ -16,10 +16,39 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+class SelectedPictogramCard {
+  final int? arasaacId;
+  final int? customPictogramId;
+  final String text;
+
+  SelectedPictogramCard(this.arasaacId, this.customPictogramId, this.text);
+
+  factory SelectedPictogramCard.fromTranslationResponse(TranslationResponse translationResponse) {
+    return SelectedPictogramCard(translationResponse.pictogramId, translationResponse.customPictogramId, translationResponse.text);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SelectedPictogramCard && other.arasaacId == arasaacId && other.customPictogramId == customPictogramId && other.text == text;
+  }
+
+  @override
+  int get hashCode => arasaacId.hashCode ^ customPictogramId.hashCode ^ text.hashCode;
+}
+
 class _HomePageState extends State<HomePage> {
-  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _controller = TextEditingController();
   final List<List<TranslationResponse>> _translationResponses = [];
+  final Set<SelectedPictogramCard> selectedPictogramCards = {};
+
+  bool isSelected(TranslationResponse translationResponse) {
+    return selectedPictogramCards
+        .contains(SelectedPictogramCard(translationResponse.pictogramId, translationResponse.customPictogramId, translationResponse.text));
+  }
+
   static const double _cardSize = 100;
   String translationName = "";
 
@@ -130,7 +159,6 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         padding: const EdgeInsets.only(bottom: 75),
         children: <Widget>[
-
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextField(
@@ -138,9 +166,7 @@ class _HomePageState extends State<HomePage> {
               maxLines: 10,
               controller: _controller,
               decoration: InputDecoration(
-                border: const OutlineInputBorder(
-
-                ),
+                border: const OutlineInputBorder(),
                 labelText: AppLocalizations.of(context)!.enterText,
               ),
               onChanged: (String value) {
@@ -164,7 +190,8 @@ class _HomePageState extends State<HomePage> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(8),
-                child: Text("${AppLocalizations.of(context)!.loadedFrom} $translationName", style: Theme.of(context).textTheme.bodySmall, textAlign: TextAlign.center),
+                child: Text("${AppLocalizations.of(context)!.loadedFrom} $translationName",
+                    style: Theme.of(context).textTheme.bodySmall, textAlign: TextAlign.center),
               ),
             ),
           ListView.separated(
@@ -199,6 +226,7 @@ class _HomePageState extends State<HomePage> {
                               customPictogramId: _translationResponses[listIndex][gridIndex].customPictogramId,
                               text: _translationResponses[listIndex][gridIndex].text,
                               error: _translationResponses[listIndex][gridIndex].error,
+                              selected: false,
                             ),
                           ),
                           child: SizedBox(
@@ -207,6 +235,19 @@ class _HomePageState extends State<HomePage> {
                               customPictogramId: _translationResponses[listIndex][gridIndex].customPictogramId,
                               text: _translationResponses[listIndex][gridIndex].text,
                               error: _translationResponses[listIndex][gridIndex].error,
+                              selected: isSelected(_translationResponses[listIndex][gridIndex]),
+                              onLongPress: () {
+                                final spc = SelectedPictogramCard.fromTranslationResponse(_translationResponses[listIndex][gridIndex]);
+                                if (isSelected(_translationResponses[listIndex][gridIndex])) {
+                                  setState(() {
+                                    selectedPictogramCards.remove(spc);
+                                  });
+                                } else {
+                                  setState(() {
+                                    selectedPictogramCards.add(spc);
+                                  });
+                                }
+                              },
                               onTap: () {
                                 showDialog(
                                     context: context,

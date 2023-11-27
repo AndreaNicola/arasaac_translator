@@ -27,10 +27,10 @@ class CustomPictogramRepository {
       join(await getDatabasesPath(), 'custom_pictograms_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE custom_pictograms(id INTEGER PRIMARY KEY, key TEXT, image BLOB)',
+          'CREATE TABLE custom_pictograms(id INTEGER PRIMARY KEY, key TEXT, image BLOB, arasaacId INTEGER)',
         );
       },
-      version: 1,
+      version: 2,
     );
   }
 
@@ -47,6 +47,7 @@ class CustomPictogramRepository {
         id: maps[i]['id'],
         key: maps[i]['key'],
         imageBytes: maps[i]['image'],
+        arasaacId: maps[i]['arasaacId'],
       );
     });
   }
@@ -76,6 +77,7 @@ class CustomPictogramRepository {
       id: maps.first['id'],
       key: maps.first['key'],
       imageBytes: maps.first['image'],
+      arasaacId: maps.first['arasaacId'],
     );
   }
 
@@ -97,6 +99,7 @@ class CustomPictogramRepository {
       id: maps.first['id'],
       key: maps.first['key'],
       imageBytes: maps.first['image'],
+      arasaacId: maps.first['arasaacId'],
     );
   }
 }
