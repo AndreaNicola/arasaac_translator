@@ -27,7 +27,7 @@ class CustomPictogramRepository {
       join(await getDatabasesPath(), 'custom_pictograms_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE custom_pictograms(id INTEGER PRIMARY KEY, key TEXT, image BLOB, arasaacId INTEGER)',
+          'CREATE TABLE custom_pictograms(key TEXT PRIMARY KEY, image BLOB, arasaacId INTEGER)',
         );
       },
       version: 2,
@@ -44,7 +44,6 @@ class CustomPictogramRepository {
 
     return List.generate(maps.length, (i) {
       return CustomPictogram(
-        id: maps[i]['id'],
         key: maps[i]['key'],
         imageBytes: maps[i]['image'],
         arasaacId: maps[i]['arasaacId'],
@@ -68,13 +67,12 @@ class CustomPictogramRepository {
   ///
   /// The id is used to query the database for the custom pictogram.
   /// The custom pictogram is represented as a `CustomPictogram` instance.
-  Future<CustomPictogram> get(int id) async {
+  Future<CustomPictogram> get(String key) async {
     final db = await _database();
 
-    final List<Map<String, dynamic>> maps = await db.query('custom_pictograms', where: "id = ?", whereArgs: [id]);
+    final List<Map<String, dynamic>> maps = await db.query('custom_pictograms', where: "key = ?", whereArgs: [key]);
 
     return CustomPictogram(
-      id: maps.first['id'],
       key: maps.first['key'],
       imageBytes: maps.first['image'],
       arasaacId: maps.first['arasaacId'],
@@ -96,7 +94,6 @@ class CustomPictogramRepository {
     }
 
     return CustomPictogram(
-      id: maps.first['id'],
       key: maps.first['key'],
       imageBytes: maps.first['image'],
       arasaacId: maps.first['arasaacId'],

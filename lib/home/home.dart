@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:arasaac_translator/arasaac/model.dart';
 import 'package:arasaac_translator/arasaac/service.dart';
+import 'package:arasaac_translator/custom_pictograms/custom_pictogram_repository.dart';
 import 'package:arasaac_translator/custom_pictograms/custom_pictograms_page.dart';
 import 'package:arasaac_translator/home/pictogram_card.dart';
 import 'package:arasaac_translator/saved_translations/saved_translations_page.dart';
@@ -9,6 +12,8 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../custom_pictograms/model.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -16,38 +21,10 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class SelectedPictogramCard {
-  final int? arasaacId;
-  final int? customPictogramId;
-  final String text;
-
-  SelectedPictogramCard(this.arasaacId, this.customPictogramId, this.text);
-
-  factory SelectedPictogramCard.fromTranslationResponse(TranslationResponse translationResponse) {
-    return SelectedPictogramCard(translationResponse.pictogramId, translationResponse.customPictogramId, translationResponse.text);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is SelectedPictogramCard && other.arasaacId == arasaacId && other.customPictogramId == customPictogramId && other.text == text;
-  }
-
-  @override
-  int get hashCode => arasaacId.hashCode ^ customPictogramId.hashCode ^ text.hashCode;
-}
-
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _controller = TextEditingController();
   final List<List<TranslationResponse>> _translationResponses = [];
-  final Set<SelectedPictogramCard> selectedPictogramCards = {};
-
-  bool isSelected(TranslationResponse translationResponse) {
-    return selectedPictogramCards
-        .contains(SelectedPictogramCard(translationResponse.pictogramId, translationResponse.customPictogramId, translationResponse.text));
-  }
 
   static const double _cardSize = 100;
   String translationName = "";
@@ -222,8 +199,8 @@ class _HomePageState extends State<HomePage> {
                             height: _cardSize,
                             width: 100,
                             child: PictogramCard(
-                              id: _translationResponses[listIndex][gridIndex].pictogramId,
-                              customPictogramId: _translationResponses[listIndex][gridIndex].customPictogramId,
+                              arasaacId: _translationResponses[listIndex][gridIndex].pictogramId,
+                              customPictogramKey: _translationResponses[listIndex][gridIndex].customPictogramKey,
                               text: _translationResponses[listIndex][gridIndex].text,
                               error: _translationResponses[listIndex][gridIndex].error,
                               selected: false,
@@ -231,22 +208,24 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: SizedBox(
                             child: PictogramCard(
-                              id: _translationResponses[listIndex][gridIndex].pictogramId,
-                              customPictogramId: _translationResponses[listIndex][gridIndex].customPictogramId,
+                              arasaacId: _translationResponses[listIndex][gridIndex].pictogramId,
+                              customPictogramKey: _translationResponses[listIndex][gridIndex].customPictogramKey,
                               text: _translationResponses[listIndex][gridIndex].text,
                               error: _translationResponses[listIndex][gridIndex].error,
-                              selected: isSelected(_translationResponses[listIndex][gridIndex]),
-                              onLongPress: () {
-                                final spc = SelectedPictogramCard.fromTranslationResponse(_translationResponses[listIndex][gridIndex]);
-                                if (isSelected(_translationResponses[listIndex][gridIndex])) {
-                                  setState(() {
-                                    selectedPictogramCards.remove(spc);
-                                  });
-                                } else {
-                                  setState(() {
-                                    selectedPictogramCards.add(spc);
-                                  });
+                              selected: false,
+                              onLongPress: () async {
+                                Uint8List? imageBytes;
+                                if (_translationResponses[listIndex][gridIndex].customPictogramKey != null) {
+                                  imageBytes = await resolveImageBytes(_translationResponses[listIndex][gridIndex].customPictogramKey!);
                                 }
+
+                                final cp = CustomPictogram(
+                                  key: _translationResponses[listIndex][gridIndex].text,
+                                  imageBytes: imageBytes,
+                                  arasaacId: _translationResponses[listIndex][gridIndex].pictogramId,
+                                );
+
+                                CustomPictogramRepository.instance.insert(cp);
                               },
                               onTap: () {
                                 showDialog(
@@ -273,5 +252,10 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  Future<Uint8List?> resolveImageBytes(String customPictogramKey) async {
+    final cp = await CustomPictogramRepository.instance.get(customPictogramKey);
+    return cp.imageBytes;
   }
 }

@@ -25,7 +25,7 @@ class EditCustomPictogramPage extends StatefulWidget {
   final CustomPictogram? customPictogram;
 
   /// The callback function to be called when the user saves the pictogram.
-  final Function(int? id, String key, Uint8List imageBytes) onSave;
+  final Function(String key, Uint8List? imageBytes, int? arasaacId ) onSave;
 
   /// Creates the mutable state for this widget at a given location in the tree.
   @override
@@ -48,6 +48,8 @@ class _EditCustomPictogramPageState extends State<EditCustomPictogramPage> {
   /// A byte array for the image data.
   Uint8List? _imageBytes;
 
+  int? _arasaacId;
+
   /// Initializes the state.
   ///
   /// If the widget's [CustomPictogram] is not null, it initializes the text
@@ -59,6 +61,7 @@ class _EditCustomPictogramPageState extends State<EditCustomPictogramPage> {
     if (widget.customPictogram != null) {
       _keyController.text = widget.customPictogram!.key;
       _imageBytes = widget.customPictogram!.imageBytes;
+      _arasaacId = widget.customPictogram!.arasaacId;
     }
   }
 
@@ -85,7 +88,7 @@ class _EditCustomPictogramPageState extends State<EditCustomPictogramPage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          widget.onSave(widget.customPictogram?.id, _keyController.text, _imageBytes!);
+          widget.onSave(_keyController.text, _imageBytes, _arasaacId);
           Navigator.pop(context);
         },
         child: const Icon(Icons.save),

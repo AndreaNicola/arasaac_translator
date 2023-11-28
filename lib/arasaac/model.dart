@@ -15,7 +15,7 @@ class TranslationResponse {
   final int? pictogramId;
 
   /// The id of the custom pictogram associated with the translation.
-  final int? customPictogramId;
+  final String? customPictogramKey;
 
   /// Whether there was an error with the translation.
   final bool error;
@@ -29,7 +29,7 @@ class TranslationResponse {
   /// The `index` and `text` parameters are required.
   /// The `pictogramId` and `customPictogramId` parameters are optional and can be null.
   /// The `error` parameter is optional and defaults to false.
-  TranslationResponse({required this.index, required this.text, this.pictogramId, this.customPictogramId, this.error = false});
+  TranslationResponse({required this.index, required this.text, this.pictogramId, this.customPictogramKey, this.error = false});
 
   /// Constructs a `TranslationResponse` instance from a JSON object.
   ///
@@ -38,7 +38,7 @@ class TranslationResponse {
   TranslationResponse.fromJson(Map<String, dynamic> json)
       : text = json['text'],
         pictogramId = json['pictogramId'],
-        customPictogramId = json['customPictogramId'],
+        customPictogramKey = json['customPictogramKey'],
         error = json['error'],
         index = json['index'];
 
@@ -49,7 +49,7 @@ class TranslationResponse {
   Map<String, dynamic> toJson() => {
         'text': text,
         'pictogramId': pictogramId,
-        'customPictogramId': customPictogramId,
+        'customPictogramKey': customPictogramKey,
         'error': error,
         'index': index,
       };

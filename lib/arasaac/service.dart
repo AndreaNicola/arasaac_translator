@@ -62,7 +62,7 @@ class ArasaacService {
       try {
         var customPictogram = await CustomPictogramRepository.instance.getFirstByKeyOrNull(part);
         if (customPictogram != null) {
-          translationResponses.add(TranslationResponse(index: index++, text: part, customPictogramId: customPictogram.id));
+          translationResponses.add(TranslationResponse(index: index++, text: part, customPictogramKey: customPictogram.key));
           continue;
         }
 

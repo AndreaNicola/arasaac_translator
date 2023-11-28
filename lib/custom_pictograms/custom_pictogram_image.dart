@@ -8,12 +8,12 @@ import 'package:flutter/material.dart';
 /// The `customPictogramId` parameter is required and represents the id of the custom pictogram.
 class CustomPictogramImage extends StatelessWidget {
   /// The id of the custom pictogram.
-  final int customPictogramId;
+  final String customPictogramKey;
 
   /// Constructs a `CustomPictogramImage` instance.
   ///
   /// The constructor takes a `customPictogramId` parameter to initialize the `customPictogramId` property.
-  const CustomPictogramImage({super.key, required this.customPictogramId});
+  const CustomPictogramImage({super.key, required this.customPictogramKey});
 
   /// Builds the widget.
   ///
@@ -23,7 +23,7 @@ class CustomPictogramImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: CustomPictogramRepository.instance.get(customPictogramId),
+      future: CustomPictogramRepository.instance.get(customPictogramKey),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.imageBytes == null) {

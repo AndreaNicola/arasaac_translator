@@ -15,10 +15,10 @@ class PictogramCard extends StatelessWidget {
   final String text;
 
   /// The id of the Arasaac pictogram to be displayed. Can be null or 0, in which case no pictogram is displayed.
-  final int? id;
+  final int? arasaacId;
 
   /// The id of the custom pictogram to be displayed. Can be null or 0, in which case no pictogram is displayed.
-  final int? customPictogramId;
+  final String? customPictogramKey;
 
   /// Indicates whether an error occurred.
   final bool error;
@@ -38,7 +38,7 @@ class PictogramCard extends StatelessWidget {
   /// The [error] parameter indicates whether an error occurred.
   /// The [onTap] parameter is the callback to be called when the card is tapped.
   const PictogramCard(
-      {super.key, required this.text, this.id, required this.error, required this.selected, this.onTap, this.onLongPress, this.customPictogramId});
+      {super.key, required this.text, this.arasaacId, required this.error, required this.selected, this.onTap, this.onLongPress, this.customPictogramKey});
 
   /// Builds the widget.
   ///
@@ -47,8 +47,7 @@ class PictogramCard extends StatelessWidget {
   /// and a [Text] with the text.
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: onTap,
+    return GestureDetector(onTap: onTap,
         onLongPress: onLongPress,
         child: Stack(
           fit: StackFit.expand,
@@ -58,8 +57,8 @@ class PictogramCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (id != null && id != 0) Expanded(child: ArasaacPictogramImage(id: id!)),
-                  if (customPictogramId != null && customPictogramId != 0) Expanded(child: CustomPictogramImage(customPictogramId: customPictogramId!)),
+                  if (arasaacId != null && arasaacId != 0) Expanded(child: ArasaacPictogramImage(id: arasaacId!)),
+                  if (customPictogramKey != null && customPictogramKey!.isNotEmpty) Expanded(child: CustomPictogramImage(customPictogramKey: customPictogramKey!)),
                   Text(
                     text,
                     textAlign: TextAlign.center,
