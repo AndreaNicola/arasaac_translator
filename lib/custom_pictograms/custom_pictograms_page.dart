@@ -100,12 +100,23 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
                       ),
                     );
                   },
-                  child: PictogramCard(
-                    text: customPictograms[index].key,
-                    error: false,
-                    customPictogramKey: customPictograms[index].key,
-                    selected: false,
-                  ),
+                  child: Stack(
+                    children: [
+                      PictogramCard(
+                        text: customPictograms[index].key,
+                        error: false,
+                        customPictogramKey: customPictograms[index].key,
+                        selected: false,
+                      ),
+                      IconButton(onPressed: (){
+                        CustomPictogramRepository.instance.delete(customPictograms[index].key);
+                        setState(() {
+                          customPictograms.removeAt(index);
+                        });
+                      }, icon: const Icon(Icons.delete)),
+                    ],
+                  )
+
                 );
               },
               itemCount: customPictograms.length,

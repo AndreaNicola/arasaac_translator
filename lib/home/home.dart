@@ -12,6 +12,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../confirm_custom_pictogram_save/confirm_custom_pictogram_save.dart';
 import '../custom_pictograms/model.dart';
 
 class HomePage extends StatefulWidget {
@@ -39,6 +40,7 @@ class _HomePageState extends State<HomePage> {
     var cardNumber = MediaQuery.of(context).size.width ~/ _cardSize;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       drawer: Drawer(
         child: ListView(
@@ -213,19 +215,32 @@ class _HomePageState extends State<HomePage> {
                               text: _translationResponses[listIndex][gridIndex].text,
                               error: _translationResponses[listIndex][gridIndex].error,
                               selected: false,
-                              onLongPress: () async {
-                                Uint8List? imageBytes;
-                                if (_translationResponses[listIndex][gridIndex].customPictogramKey != null) {
-                                  imageBytes = await resolveImageBytes(_translationResponses[listIndex][gridIndex].customPictogramKey!);
+                              onLongPress: () {
+                                if (_translationResponses[listIndex][gridIndex].customPictogramKey != null ||
+                                    _translationResponses[listIndex][gridIndex].pictogramId != null) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => ConfirmCustomPictogramSave(
+                                            onConfirm: () async {
+                                              Navigator.pop(context);
+                                              Uint8List? imageBytes;
+                                              if (_translationResponses[listIndex][gridIndex].customPictogramKey != null) {
+                                                imageBytes = await resolveImageBytes(_translationResponses[listIndex][gridIndex].customPictogramKey!);
+                                              }
+                                              final cp = CustomPictogram(
+                                                key: _translationResponses[listIndex][gridIndex].text,
+                                                imageBytes: imageBytes,
+                                                arasaacId: _translationResponses[listIndex][gridIndex].pictogramId,
+                                              );
+
+                                              CustomPictogramRepository.instance.insert(cp);
+                                            },
+                                            onCancel: () {
+                                              Navigator.pop(context);
+                                            },
+                                            translationResponse: _translationResponses[listIndex][gridIndex],
+                                          ));
                                 }
-
-                                final cp = CustomPictogram(
-                                  key: _translationResponses[listIndex][gridIndex].text,
-                                  imageBytes: imageBytes,
-                                  arasaacId: _translationResponses[listIndex][gridIndex].pictogramId,
-                                );
-
-                                CustomPictogramRepository.instance.insert(cp);
                               },
                               onTap: () {
                                 showDialog(
@@ -256,6 +271,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<Uint8List?> resolveImageBytes(String customPictogramKey) async {
     final cp = await CustomPictogramRepository.instance.get(customPictogramKey);
-    return cp.imageBytes;
+    return cp?.imageBytes;
   }
 }

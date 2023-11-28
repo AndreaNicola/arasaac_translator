@@ -15,5 +15,9 @@
   "aboutText" : "Arasaac Translator is a free tool to translate text to pictograms. It uses the Arasaac pictogram set, which is licensed under Creative Commons BY-NC-SA 3.0. You can find more information about Arasaac at http://arasaac.org",
   "confirm": "Confirm",
   "areYouSure": "Are you sure you want to delete this translation?",
-  "loadedFrom": "Loaded from:"
+  "loadedFrom": "Loaded from:",
+  "confirmCustomPictogramSaveTitle" : "Save custom pictogram",
+  "confirmCustomPictogramSaveText" : "Are you sure you want to save this pictogram as a new custom pictogram?",
+  "confirmCustomPictogramSaveOverwrite" : "This action is going to overwrite the existing custom pictogram."
+
 }

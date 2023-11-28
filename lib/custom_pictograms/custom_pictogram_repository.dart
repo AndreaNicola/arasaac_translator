@@ -67,10 +67,14 @@ class CustomPictogramRepository {
   ///
   /// The id is used to query the database for the custom pictogram.
   /// The custom pictogram is represented as a `CustomPictogram` instance.
-  Future<CustomPictogram> get(String key) async {
+  Future<CustomPictogram?> get(String key) async {
     final db = await _database();
 
     final List<Map<String, dynamic>> maps = await db.query('custom_pictograms', where: "key = ?", whereArgs: [key]);
+
+    if (maps.isEmpty) {
+      return null;
+    }
 
     return CustomPictogram(
       key: maps.first['key'],
@@ -98,5 +102,10 @@ class CustomPictogramRepository {
       imageBytes: maps.first['image'],
       arasaacId: maps.first['arasaacId'],
     );
+  }
+
+  Future<void> delete(String key) async {
+    final db = await _database();
+    await db.delete('custom_pictograms', where: "key = ?", whereArgs: [key]);
   }
 }

@@ -15,5 +15,8 @@
   "aboutText" : "Arasaac Translator è uno strumento gratuito per tradurre il testo in pittogrammi. Utilizza il set di pittogrammi Arasaac, che è concesso in licenza sotto Creative Commons BY-NC-SA 3.0. Puoi trovare ulteriori informazioni su Arasaac su http://arasaac.org",
   "confirm": "Conferma",
   "areYouSure": "Sei sicuro di voler cancellare questa traduzione?",
-  "loadedFrom": "Caricato da:"
+  "loadedFrom": "Caricato da:",
+  "confirmCustomPictogramSaveTitle": "Salva il pittogramma personalizzato",
+  "confirmCustomPictogramSaveText" : "Sei sicuro di voler salvare questo pittogramma personalizzato?",
+  "confirmCustomPictogramSaveOverwrite" : "Questa azione sovrascriverà il pittogramma già esistente per questa parola"
 }
