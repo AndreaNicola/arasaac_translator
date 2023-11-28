@@ -18,5 +18,9 @@
   "loadedFrom": "Caricato da:",
   "confirmCustomPictogramSaveTitle": "Salva il pittogramma personalizzato",
   "confirmCustomPictogramSaveText" : "Sei sicuro di voler salvare questo pittogramma personalizzato?",
-  "confirmCustomPictogramSaveOverwrite" : "Questa azione sovrascriverà il pittogramma già esistente per questa parola"
+  "confirmCustomPictogramSaveOverwrite" : "Questa azione sovrascriverà il pittogramma già esistente per questa parola",
+  "confirmCustomPictogramDeleteTitle": "Cancella il pittogramma personalizzato",
+  "confirmCustomPictogramDeleteText": "Sei sicuro di voler cancellare questo pittogramma personalizzato?",
+  "delete": "Cancella"
+
 }

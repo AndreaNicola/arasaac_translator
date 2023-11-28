@@ -18,6 +18,9 @@
   "loadedFrom": "Loaded from:",
   "confirmCustomPictogramSaveTitle" : "Save custom pictogram",
   "confirmCustomPictogramSaveText" : "Are you sure you want to save this pictogram as a new custom pictogram?",
-  "confirmCustomPictogramSaveOverwrite" : "This action is going to overwrite the existing custom pictogram."
+  "confirmCustomPictogramSaveOverwrite" : "This action is going to overwrite the existing custom pictogram.",
+  "confirmCustomPictogramDeleteTitle" : "Delete custom pictogram",
+  "confirmCustomPictogramDeleteText" : "Are you sure you want to delete this custom pictogram?",
+  "delete": "Delete"
 
 }

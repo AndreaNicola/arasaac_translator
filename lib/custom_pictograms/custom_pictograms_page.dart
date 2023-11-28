@@ -82,42 +82,73 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
               ),
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditCustomPictogramPage(
-                          customPictogram: customPictograms[index],
-                          onSave: (key, imageBytes, arasaacId) async {
-                            await CustomPictogramRepository.instance.insert(CustomPictogram(key: key, imageBytes: imageBytes, arasaacId: arasaacId));
-                            var newCustomPictograms = await CustomPictogramRepository.instance.list();
-                            setState(() {
-                              customPictograms.clear();
-                              customPictograms.addAll(newCustomPictograms);
-                            });
-                          },
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditCustomPictogramPage(
+                            customPictogram: customPictograms[index],
+                            onSave: (key, imageBytes, arasaacId) async {
+                              await CustomPictogramRepository.instance.insert(CustomPictogram(key: key, imageBytes: imageBytes, arasaacId: arasaacId));
+                              var newCustomPictograms = await CustomPictogramRepository.instance.list();
+                              setState(() {
+                                customPictograms.clear();
+                                customPictograms.addAll(newCustomPictograms);
+                              });
+                            },
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: Stack(
-                    children: [
-                      PictogramCard(
-                        text: customPictograms[index].key,
-                        error: false,
-                        customPictogramKey: customPictograms[index].key,
-                        selected: false,
-                      ),
-                      IconButton(onPressed: (){
-                        CustomPictogramRepository.instance.delete(customPictograms[index].key);
-                        setState(() {
-                          customPictograms.removeAt(index);
-                        });
-                      }, icon: const Icon(Icons.delete)),
-                    ],
-                  )
-
-                );
+                      );
+                    },
+                    child: Stack(
+                      children: [
+                        PictogramCard(
+                          text: customPictograms[index].key,
+                          error: false,
+                          customPictogramKey: customPictograms[index].key,
+                          selected: false,
+                        ),
+                        Positioned(
+                          right: 10,
+                          top: 10,
+                          child: CircleAvatar(
+                            radius: 20,
+                            child: IconButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text(AppLocalizations.of(context)!.confirmCustomPictogramDeleteTitle),
+                                      content: Text(AppLocalizations.of(context)!.confirmCustomPictogramDeleteText),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(AppLocalizations.of(context)!.cancel),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            CustomPictogramRepository.instance.delete(customPictograms[index].key);
+                                            setState(() {
+                                              customPictograms.removeAt(index);
+                                            });
+                                          },
+                                          child: Text(AppLocalizations.of(context)!.delete),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              icon: const Icon(Icons.delete),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ));
               },
               itemCount: customPictograms.length,
             ),
