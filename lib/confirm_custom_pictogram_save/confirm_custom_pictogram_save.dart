@@ -67,9 +67,7 @@ class _ConfirmCustomPictogramSaveState extends State<ConfirmCustomPictogramSave>
               height: 150,
               child: PictogramCard(
                 text: oldCustomPictogram!.key,
-                // arasaacId: oldCustomPictogram!.arasaacId,
                 customPictogramKey: oldCustomPictogram!.key,
-                error: false,
                 onTap: null,
                 onLongPress: null,
               ),

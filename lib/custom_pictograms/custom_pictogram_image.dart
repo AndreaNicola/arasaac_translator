@@ -37,7 +37,7 @@ class CustomPictogramImage extends StatelessWidget {
             );
           }
         } else {
-          return const CircularProgressIndicator();
+          return const Icon(Icons.error);
         }
       },
     );

@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+late ColorScheme lightTheme;
+late ColorScheme darkTheme;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  lightTheme = await ColorScheme.fromImageProvider(provider: Image.asset('images/logo_ARASAAC.png').image, brightness: Brightness.light);
+  darkTheme = await ColorScheme.fromImageProvider(provider: Image.asset('images/logo_ARASAAC.png').image, brightness: Brightness.dark);
   runApp(const MyApp());
 }
 
@@ -26,8 +31,12 @@ class MyApp extends StatelessWidget {
         Locale('en'), // English
         Locale('it'), // Italian
       ],
+      darkTheme: ThemeData(
+        colorScheme: darkTheme,
+        useMaterial3: true,
+      ),
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: lightTheme,
         useMaterial3: true,
       ),
       home: const HomePage(),

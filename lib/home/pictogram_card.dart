@@ -20,9 +20,6 @@ class PictogramCard extends StatelessWidget {
   /// The id of the custom pictogram to be displayed. Can be null or 0, in which case no pictogram is displayed.
   final String? customPictogramKey;
 
-  /// Indicates whether an error occurred.
-  final bool error;
-
   /// The callback to be called when the card is tapped. Can be null, in which case nothing happens when the card is tapped.
   final Function()? onTap;
 
@@ -35,7 +32,7 @@ class PictogramCard extends StatelessWidget {
   /// The [customPictogramId] parameter is the id of the custom pictogram to be displayed.
   /// The [error] parameter indicates whether an error occurred.
   /// The [onTap] parameter is the callback to be called when the card is tapped.
-  const PictogramCard({super.key, required this.text, this.arasaacId, required this.error, this.onTap, this.onLongPress, this.customPictogramKey});
+  const PictogramCard({super.key, required this.text, this.arasaacId, this.onTap, this.onLongPress, this.customPictogramKey});
 
   /// Builds the widget.
   ///

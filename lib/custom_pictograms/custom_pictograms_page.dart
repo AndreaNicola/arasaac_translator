@@ -101,10 +101,10 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
                       );
                     },
                     child: Stack(
+                      fit: StackFit.expand,
                       children: [
                         PictogramCard(
                           text: customPictograms[index].key,
-                          error: false,
                           customPictogramKey: customPictograms[index].key,
                         ),
                         Positioned(

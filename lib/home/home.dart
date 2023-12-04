@@ -11,6 +11,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../confirm_custom_pictogram_save/confirm_custom_pictogram_save.dart';
 import '../custom_pictograms/model.dart';
@@ -45,11 +46,22 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.deepPurple,
+            DrawerHeader(
+              child: Column(
+                children: [
+                  const CircleAvatar(
+                    radius: 40,
+                    backgroundImage: AssetImage('images/icon_ARASAAC.png'),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.title,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ],
               ),
-              child: Text('Arasaac Translator'),
             ),
             ListTile(
               leading: const Icon(Icons.image),
@@ -83,15 +95,22 @@ class _HomePageState extends State<HomePage> {
               leading: const Icon(Icons.info_outline),
               title: Text(AppLocalizations.of(context)!.about),
               onTap: () {
-                showAboutDialog(
-                  context: context,
-                  applicationName: 'Arasaac Translator',
-                  applicationVersion: '0.0.1',
-                  applicationIcon: const Icon(Icons.translate),
-                  children: [
-                    Text(AppLocalizations.of(context)!.aboutText),
-                  ],
-                );
+                 PackageInfo.fromPlatform().then((packageInfo) {
+                   showAboutDialog(
+                    context: context,
+                    applicationName: packageInfo.appName,
+                    applicationVersion: packageInfo.version,
+                    applicationIcon: Image.asset(
+                      'images/icon_ARASAAC.png',
+                      width: 50,
+                      height: 50,
+                    ),
+                    children: [
+                      Text(AppLocalizations.of(context)!.aboutText),
+                    ],
+                  );
+                });
+
               },
             ),
           ],
@@ -103,7 +122,8 @@ class _HomePageState extends State<HomePage> {
           if (_translationResponses.isNotEmpty)
             FloatingActionButton(
               onPressed: () {
-                PrintService.instance.print(fileName: translationName.isEmpty ? "new-translation" : translationName, translationResponses: _translationResponses);
+                PrintService.instance
+                    .print(fileName: translationName.isEmpty ? "new-translation" : translationName, translationResponses: _translationResponses);
               },
               heroTag: 'print',
               child: const Icon(Icons.print),
@@ -135,7 +155,7 @@ class _HomePageState extends State<HomePage> {
       ),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(AppLocalizations.of(context)!.title),
+        title: const Text("ARASAAC Translator"),
       ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 75),
@@ -210,7 +230,6 @@ class _HomePageState extends State<HomePage> {
                               arasaacId: _translationResponses[listIndex][gridIndex].pictogramId,
                               customPictogramKey: _translationResponses[listIndex][gridIndex].customPictogramKey,
                               text: _translationResponses[listIndex][gridIndex].text,
-                              error: _translationResponses[listIndex][gridIndex].error,
                             ),
                           ),
                           child: SizedBox(
@@ -218,7 +237,6 @@ class _HomePageState extends State<HomePage> {
                               arasaacId: _translationResponses[listIndex][gridIndex].pictogramId,
                               customPictogramKey: _translationResponses[listIndex][gridIndex].customPictogramKey,
                               text: _translationResponses[listIndex][gridIndex].text,
-                              error: _translationResponses[listIndex][gridIndex].error,
                               onLongPress: () {
                                 if (_translationResponses[listIndex][gridIndex].customPictogramKey != null ||
                                     _translationResponses[listIndex][gridIndex].pictogramId != null) {
