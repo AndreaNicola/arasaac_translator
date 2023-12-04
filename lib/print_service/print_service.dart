@@ -2,40 +2,20 @@ import 'dart:io';
 
 import 'package:arasaac_translator/arasaac/model.dart';
 import 'package:arasaac_translator/custom_pictograms/custom_pictogram_repository.dart';
+import 'package:arasaac_translator/print_service/my_full_page.dart';
 import 'package:arasaac_translator/utils/arasaac_pictogram_uri.dart';
-import 'package:flutter/foundation.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
 
 class PrintService {
   bool isPrinting = false;
   static final PrintService instance = PrintService._internal();
 
-  late bool _permissionReady;
-  late TargetPlatform? _platform;
-
-  PrintService._internal() {
-    if (Platform.isAndroid) {
-      _platform = TargetPlatform.android;
-    } else {
-      _platform = TargetPlatform.iOS;
-    }
-  }
-
-  Future<List<Widget>> _createSentence(List<TranslationResponse> sentence) async {
-    var sentenceChildren = <Widget>[];
-
-    for (var word in sentence) {
-      sentenceChildren.add(await _createWord(word));
-    }
-
-    return sentenceChildren;
-  }
+  PrintService._internal();
 
   Future<Widget> _createWord(TranslationResponse word) async {
     Image? image;
@@ -85,33 +65,60 @@ class PrintService {
   }
 
   void print({required String fileName, required List<List<TranslationResponse>> translationResponses}) async {
-
-
-    List<Widget> sentencesChildren = [];
-    for (var sentence in translationResponses) {
-      sentencesChildren.add(pw.GridView(
-        childAspectRatio: 1.2,
-        crossAxisCount: 6,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        children: await _createSentence(sentence),
-      ));
-    }
+    final fullPages = await _createFullPages(maxRows: 7,  maxColumns: 6, translationResponses: translationResponses);
+    final pages = fullPages.map((e) => _convertMyFullPage(e)).toList();
 
     final pdf = pw.Document();
-    pdf.addPage(
-      pw.Page(
-          pageFormat: PdfPageFormat.a4,
-          build: (pw.Context context) {
-            return pw.Column(
-              children: sentencesChildren,
-            );
-          }),
-    );
+    for (var element in pages) {
+      pdf.addPage(element);
+    }
 
     final dir = await getApplicationCacheDirectory();
     final file = File('${dir.path}/$fileName.pdf');
     await file.writeAsBytes(await pdf.save());
     await OpenFile.open(file.path);
+  }
+
+  Future<List<MyFullPage<Widget>>> _createFullPages({
+    required int maxRows,
+    required int maxColumns,
+    required List<List<TranslationResponse>> translationResponses,
+  }) async {
+    var fullPages = <MyFullPage<Widget>>[MyFullPage(maxRows: maxRows, maxColumns: maxColumns)];
+    for (var sentence in translationResponses) {
+      for (var word in sentence) {
+        final w = await _createWord(word);
+        try {
+          fullPages.last.add(w);
+        } catch (e) {
+          fullPages.add(MyFullPage(maxRows: maxRows, maxColumns: maxColumns));
+          fullPages.last.add(w);
+        }
+      }
+
+      try {
+        fullPages.last.newLine();
+      } catch (e) {
+        fullPages.add(MyFullPage(maxRows: maxRows, maxColumns: maxColumns));
+      }
+    }
+
+    return fullPages;
+  }
+
+  pw.Page _convertMyFullPage(MyFullPage<Widget> fullPage) {
+    final pageElements = fullPage.page.map((e) => e ?? pw.Container(width: 0, height: 0)).toList();
+    return pw.Page(
+      pageFormat: PdfPageFormat.a4,
+      build: (pw.Context context) {
+        return pw.GridView(
+          childAspectRatio: 1.2,
+          crossAxisCount: fullPage.maxColumns,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          children: pageElements,
+        );
+      },
+    );
   }
 }
