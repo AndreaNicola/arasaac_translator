@@ -70,7 +70,6 @@ class _ConfirmCustomPictogramSaveState extends State<ConfirmCustomPictogramSave>
                 // arasaacId: oldCustomPictogram!.arasaacId,
                 customPictogramKey: oldCustomPictogram!.key,
                 error: false,
-                selected: false,
                 onTap: null,
                 onLongPress: null,
               ),

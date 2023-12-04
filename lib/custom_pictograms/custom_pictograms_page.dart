@@ -106,7 +106,6 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
                           text: customPictograms[index].key,
                           error: false,
                           customPictogramKey: customPictograms[index].key,
-                          selected: false,
                         ),
                         Positioned(
                           right: 10,

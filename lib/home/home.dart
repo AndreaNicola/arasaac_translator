@@ -1,15 +1,15 @@
-import 'dart:typed_data';
-
 import 'package:arasaac_translator/arasaac/model.dart';
 import 'package:arasaac_translator/arasaac/service.dart';
 import 'package:arasaac_translator/custom_pictograms/custom_pictogram_repository.dart';
 import 'package:arasaac_translator/custom_pictograms/custom_pictograms_page.dart';
 import 'package:arasaac_translator/home/pictogram_card.dart';
+import 'package:arasaac_translator/print_service/print_service.dart';
 import 'package:arasaac_translator/saved_translations/saved_translations_page.dart';
 import 'package:arasaac_translator/saved_translations/saved_translations_repository.dart';
 import 'package:arasaac_translator/utils/edit_text_dialog.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../confirm_custom_pictogram_save/confirm_custom_pictogram_save.dart';
@@ -102,7 +102,9 @@ class _HomePageState extends State<HomePage> {
         children: [
           if (_translationResponses.isNotEmpty)
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                PrintService.instance.print(fileName: translationName.isEmpty ? "new-translation" : translationName, translationResponses: _translationResponses);
+              },
               heroTag: 'print',
               child: const Icon(Icons.print),
             ),
@@ -141,6 +143,11 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextField(
+              inputFormatters: [
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  return newValue.copyWith(text: newValue.text.toUpperCase());
+                })
+              ],
               minLines: 3,
               maxLines: 10,
               controller: _controller,
@@ -153,9 +160,8 @@ class _HomePageState extends State<HomePage> {
                   'translation-debounce', // <-- An ID for this particular debouncer
                   const Duration(milliseconds: 1000), // <-- The debounce duration
                   () async {
-                    _controller.text = value.toUpperCase();
                     final Locale locale = Localizations.localeOf(context);
-                    var translationResponses = await ArasaacService().translateText(locale, _controller.text);
+                    var translationResponses = await ArasaacService.instance.translateText(locale, _controller.text);
                     setState(() {
                       _translationResponses.clear();
                       _translationResponses.addAll(translationResponses);
@@ -199,13 +205,12 @@ class _HomePageState extends State<HomePage> {
                           data: _translationResponses[listIndex][gridIndex],
                           feedback: SizedBox(
                             height: _cardSize,
-                            width: 100,
+                            width: _cardSize,
                             child: PictogramCard(
                               arasaacId: _translationResponses[listIndex][gridIndex].pictogramId,
                               customPictogramKey: _translationResponses[listIndex][gridIndex].customPictogramKey,
                               text: _translationResponses[listIndex][gridIndex].text,
                               error: _translationResponses[listIndex][gridIndex].error,
-                              selected: false,
                             ),
                           ),
                           child: SizedBox(
@@ -214,7 +219,6 @@ class _HomePageState extends State<HomePage> {
                               customPictogramKey: _translationResponses[listIndex][gridIndex].customPictogramKey,
                               text: _translationResponses[listIndex][gridIndex].text,
                               error: _translationResponses[listIndex][gridIndex].error,
-                              selected: false,
                               onLongPress: () {
                                 if (_translationResponses[listIndex][gridIndex].customPictogramKey != null ||
                                     _translationResponses[listIndex][gridIndex].pictogramId != null) {

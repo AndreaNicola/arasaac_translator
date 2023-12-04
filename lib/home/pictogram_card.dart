@@ -23,8 +23,6 @@ class PictogramCard extends StatelessWidget {
   /// Indicates whether an error occurred.
   final bool error;
 
-  final bool selected;
-
   /// The callback to be called when the card is tapped. Can be null, in which case nothing happens when the card is tapped.
   final Function()? onTap;
 
@@ -37,8 +35,7 @@ class PictogramCard extends StatelessWidget {
   /// The [customPictogramId] parameter is the id of the custom pictogram to be displayed.
   /// The [error] parameter indicates whether an error occurred.
   /// The [onTap] parameter is the callback to be called when the card is tapped.
-  const PictogramCard(
-      {super.key, required this.text, this.arasaacId, required this.error, required this.selected, this.onTap, this.onLongPress, this.customPictogramKey});
+  const PictogramCard({super.key, required this.text, this.arasaacId, required this.error, this.onTap, this.onLongPress, this.customPictogramKey});
 
   /// Builds the widget.
   ///
@@ -47,37 +44,27 @@ class PictogramCard extends StatelessWidget {
   /// and a [Text] with the text.
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(onTap: onTap,
-        onLongPress: onLongPress,
-        child: Stack(
-          fit: StackFit.expand,
+    return GestureDetector(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      child: Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Card(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (arasaacId != null && arasaacId != 0) Expanded(child: ArasaacPictogramImage(id: arasaacId!)),
-                  if (customPictogramKey != null && customPictogramKey!.isNotEmpty) Expanded(child: CustomPictogramImage(customPictogramKey: customPictogramKey!)),
-                  Text(
-                    text,
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.visible,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ],
+            if (arasaacId != null && arasaacId != 0) Expanded(child: ArasaacPictogramImage(id: arasaacId!)),
+            if (customPictogramKey != null && customPictogramKey!.isNotEmpty) Expanded(child: CustomPictogramImage(customPictogramKey: customPictogramKey!)),
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.visible,
+              style: const TextStyle(
+                fontSize: 16,
               ),
             ),
-            if (selected)
-              const Positioned(
-                top: 0,
-                right: 0,
-                child: Icon(Icons.check_circle, color: Colors.green),
-              ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }

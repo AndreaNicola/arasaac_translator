@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 /// It uses the singleton pattern to ensure that only one instance of the class is created.
 class ArasaacService {
   /// The singleton instance of the `ArasaacService` class.
-  static final ArasaacService _instance = ArasaacService._internal();
+  static final ArasaacService instance = ArasaacService._internal();
 
   /// The `ArasaacApi` instance used to interact with the Arasaac API.
   late ArasaacApi _api;
@@ -17,9 +17,6 @@ class ArasaacService {
   /// The factory constructor for the `ArasaacService` class.
   ///
   /// This constructor returns the singleton instance of the `ArasaacService` class.
-  factory ArasaacService() {
-    return _instance;
-  }
 
   /// The private constructor for the `ArasaacService` class.
   ///
