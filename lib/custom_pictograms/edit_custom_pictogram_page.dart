@@ -93,7 +93,7 @@ class _EditCustomPictogramPageState extends State<EditCustomPictogramPage> {
         },
         child: const Icon(Icons.save),
       ),
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.newCustomPictogram)),
+      appBar: AppBar(title: widget.customPictogram == null ? Text(AppLocalizations.of(context)!.newCustomPictogram) : Text(AppLocalizations.of(context)!.editCustomPictogram)),
       body: ListView(
         padding: const EdgeInsets.all(8),
         children: [

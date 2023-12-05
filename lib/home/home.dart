@@ -1,3 +1,4 @@
+import 'package:arasaac_translator/app_guide/app_guide_page.dart';
 import 'package:arasaac_translator/arasaac/model.dart';
 import 'package:arasaac_translator/arasaac/service.dart';
 import 'package:arasaac_translator/custom_pictograms/custom_pictogram_repository.dart';
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   final List<List<TranslationResponse>> _translationResponses = [];
 
-  static const double _cardSize = 100;
+  static const double _cardSize = 125;
   String translationName = "";
 
   @override
@@ -92,6 +93,13 @@ class _HomePageState extends State<HomePage> {
             ),
             const Divider(),
             ListTile(
+              leading: const Icon(Icons.help),
+              title: Text(AppLocalizations.of(context)!.appGuide),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const AppGuidePage()));
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.info_outline),
               title: Text(AppLocalizations.of(context)!.about),
               onTap: () {
@@ -106,6 +114,11 @@ class _HomePageState extends State<HomePage> {
                       height: 50,
                     ),
                     children: [
+                      Image.asset(
+                        'images/logo_ARASAAC.png',
+                        width: 100,
+                        height: 100,
+                      ),
                       Text(AppLocalizations.of(context)!.aboutText),
                     ],
                   );

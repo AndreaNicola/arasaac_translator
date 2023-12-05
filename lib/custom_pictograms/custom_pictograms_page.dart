@@ -26,6 +26,7 @@ class CustomPictogramsPage extends StatefulWidget {
 class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
   /// The list of custom pictograms.
   List<CustomPictogram> customPictograms = [];
+  static const double _cardSize = 125;
 
   /// Initializes the state.
   ///
@@ -46,6 +47,8 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
   /// The `Scaffold` widget contains a `FloatingActionButton` for navigating to the `EditCustomPictogramPage` widget and a `GridView` for displaying the list of custom pictograms.
   @override
   Widget build(BuildContext context) {
+    var cardNumber = MediaQuery.of(context).size.width ~/ _cardSize;
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -75,8 +78,8 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
             )
           : GridView.builder(
               padding: const EdgeInsets.all(8),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: cardNumber,
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8,
               ),
@@ -101,49 +104,51 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
                       );
                     },
                     child: Stack(
-                      fit: StackFit.expand,
+                      // fit: StackFit.expand,
+                      clipBehavior: Clip.none,
                       children: [
                         PictogramCard(
                           text: customPictograms[index].key,
                           customPictogramKey: customPictograms[index].key,
                         ),
                         Positioned(
-                          right: 10,
-                          top: 10,
-                          child: CircleAvatar(
-                            radius: 20,
-                            child: IconButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text(AppLocalizations.of(context)!.confirmCustomPictogramDeleteTitle),
-                                      content: Text(AppLocalizations.of(context)!.confirmCustomPictogramDeleteText),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text(AppLocalizations.of(context)!.cancel),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            CustomPictogramRepository.instance.delete(customPictograms[index].key);
-                                            setState(() {
-                                              customPictograms.removeAt(index);
-                                            });
-                                          },
-                                          child: Text(AppLocalizations.of(context)!.delete),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              icon: const Icon(Icons.delete),
-                            ),
+                          right: -10,
+                          top: -10,
+                          child: FloatingActionButton.small(
+                            heroTag: 'delete${customPictograms[index].key}',
+
+                            shape: const CircleBorder(),
+                            onPressed: (){
+
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text(AppLocalizations.of(context)!.confirmCustomPictogramDeleteTitle),
+                                    content: Text(AppLocalizations.of(context)!.confirmCustomPictogramDeleteText),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(AppLocalizations.of(context)!.cancel),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          CustomPictogramRepository.instance.delete(customPictograms[index].key);
+                                          setState(() {
+                                            customPictograms.removeAt(index);
+                                          });
+                                        },
+                                        child: Text(AppLocalizations.of(context)!.delete),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: const Icon(Icons.delete),
                           ),
                         ),
                       ],

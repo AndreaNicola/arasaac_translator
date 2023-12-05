@@ -45,21 +45,22 @@ class PictogramCard extends StatelessWidget {
       onTap: onTap,
       onLongPress: onLongPress,
       child: Card(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (arasaacId != null && arasaacId != 0) Expanded(child: ArasaacPictogramImage(id: arasaacId!)),
-            if (customPictogramKey != null && customPictogramKey!.isNotEmpty) Expanded(child: CustomPictogramImage(customPictogramKey: customPictogramKey!)),
-            Text(
-              text,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.visible,
-              style: const TextStyle(
-                fontSize: 16,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (arasaacId != null && arasaacId != 0) Expanded(child: ArasaacPictogramImage(id: arasaacId!)),
+              if (customPictogramKey != null && customPictogramKey!.isNotEmpty) Expanded(child: CustomPictogramImage(customPictogramKey: customPictogramKey!)),
+              Text(
+                text,
+                textAlign: TextAlign.center,
+                maxLines: 2,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

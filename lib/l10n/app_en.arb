@@ -21,5 +21,7 @@
   "save": "Save",
   "saveTranslationName": "Save translation as...",
   "savedTranslations": "Saved translations",
-  "title": "ARASAAC translator"
+  "title": "ARASAAC translator",
+  "editCustomPictogram": "Edit custom pictogram",
+  "appGuide" : "User guide"
 }
