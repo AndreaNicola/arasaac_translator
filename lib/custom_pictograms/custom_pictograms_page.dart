@@ -104,7 +104,7 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
                       );
                     },
                     child: Stack(
-                      // fit: StackFit.expand,
+                      fit: StackFit.expand,
                       clipBehavior: Clip.none,
                       children: [
                         PictogramCard(
@@ -116,10 +116,8 @@ class _CustomPictogramsPageState extends State<CustomPictogramsPage> {
                           top: -10,
                           child: FloatingActionButton.small(
                             heroTag: 'delete${customPictograms[index].key}',
-
                             shape: const CircleBorder(),
-                            onPressed: (){
-
+                            onPressed: () {
                               showDialog(
                                 context: context,
                                 builder: (context) {
