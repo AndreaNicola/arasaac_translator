@@ -25,8 +25,9 @@ class PrintService {
       final netImage = await networkImage(imageUri);
       image = pw.Image(
         netImage,
-        // width: 75,
-        // height: 75,
+        width: 100,
+        height: 100,
+        fit: pw.BoxFit.cover,
       );
     } else {
       final pictogramKey = word.customPictogramKey ?? "";
@@ -37,35 +38,46 @@ class PrintService {
           final netImage = await networkImage(imageUri);
           image = pw.Image(
             netImage,
-            // width: 75,
-            // height: 75,
+            width: 100,
+            height: 100,
+            fit: pw.BoxFit.cover,
           );
         } else if (cp.imageBytes != null) {
           image = pw.Image(
+            height: 100,
+            width: 100,
+            fit: pw.BoxFit.cover,
             pw.MemoryImage(
               cp.imageBytes!,
             ),
-            // width: 75,
-            // height: 75,
           );
         }
       }
     }
 
     return pw.Container(
+      width: 100,
+      height: 100,
       child: pw.Column(
+        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (image != null) image,
-          pw.Text(word.text),
+          pw.Expanded(
+            child: pw.Text(
+              textAlign: pw.TextAlign.center,
+              word.text,
+              overflow: pw.TextOverflow.visible,
+            ),
+          ),
         ],
       ),
     );
   }
 
   void print({required String fileName, required List<List<TranslationResponse>> translationResponses}) async {
-    final fullPages = await _createFullPages(maxRows: 7,  maxColumns: 6, translationResponses: translationResponses);
+    final fullPages = await _createFullPages(maxRows: 6, maxColumns: 5, translationResponses: translationResponses);
     final pages = fullPages.map((e) => _convertMyFullPage(e)).toList();
 
     final pdf = pw.Document();
@@ -107,15 +119,16 @@ class PrintService {
   }
 
   pw.Page _convertMyFullPage(MyFullPage<Widget> fullPage) {
-    final pageElements = fullPage.page.map((e) => e ?? pw.Container(width: 0, height: 0)).toList();
+    final pageElements = fullPage.page.map((e) {
+      return e ?? pw.Container(width: 0, height: 0);
+    }).toList();
     return pw.Page(
       pageFormat: PdfPageFormat.a4,
       build: (pw.Context context) {
         return pw.GridView(
-          childAspectRatio: 1.2,
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
           crossAxisCount: fullPage.maxColumns,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
           children: pageElements,
         );
       },

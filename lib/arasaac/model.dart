@@ -12,7 +12,7 @@ class TranslationResponse {
   String text;
 
   /// The id of the pictogram associated with the translation.
-  final int? pictogramId;
+  int? pictogramId;
 
   /// The id of the custom pictogram associated with the translation.
   final String? customPictogramKey;
@@ -23,13 +23,22 @@ class TranslationResponse {
   /// The index of the translation in a list of translations.
   final int index;
 
+  final List<TranslationResponse> alternatives;
+
   /// Constructs a `TranslationResponse` instance.
   ///
   /// The constructor takes several parameters to initialize the properties of the instance.
   /// The `index` and `text` parameters are required.
   /// The `pictogramId` and `customPictogramId` parameters are optional and can be null.
   /// The `error` parameter is optional and defaults to false.
-  TranslationResponse({required this.index, required this.text, this.pictogramId, this.customPictogramKey, this.error = false});
+  TranslationResponse({
+    required this.index,
+    required this.text,
+    this.pictogramId,
+    this.customPictogramKey,
+    this.error = false,
+    this.alternatives = const [],
+  });
 
   /// Constructs a `TranslationResponse` instance from a JSON object.
   ///
@@ -40,7 +49,10 @@ class TranslationResponse {
         pictogramId = json['pictogramId'],
         customPictogramKey = json['customPictogramKey'],
         error = json['error'],
-        index = json['index'];
+        index = json['index'],
+        alternatives = ((json['alternatives'] ?? []) as List<dynamic>)
+            .map((e) => TranslationResponse.fromJson(e))
+            .toList();
 
   /// Converts the `TranslationResponse` instance to a JSON object.
   ///
@@ -52,5 +64,6 @@ class TranslationResponse {
         'customPictogramKey': customPictogramKey,
         'error': error,
         'index': index,
+        'alternatives': alternatives.toList(),
       };
 }

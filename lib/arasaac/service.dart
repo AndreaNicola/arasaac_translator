@@ -30,7 +30,8 @@ class ArasaacService {
   /// This method takes a `locale` and a `text` as parameters.
   /// It splits the `text` into lines and translates each line into a list of `TranslationResponse` instances.
   /// It returns a list of these lists.
-  Future<List<List<TranslationResponse>>> translateText(Locale locale, String text) async {
+  Future<List<List<TranslationResponse>>> translateText(
+      Locale locale, String text) async {
     var lines = text.toUpperCase().trim().split("\n");
     List<List<TranslationResponse>> translationResponses = [];
     for (var line in lines) {
@@ -46,7 +47,8 @@ class ArasaacService {
   /// It takes a `locale` and a `text` as parameters.
   /// It splits the `text` into parts and translates each part into a `TranslationResponse` instance.
   /// It returns a list of these instances.
-  Future<List<TranslationResponse>> _translateString(Locale locale, String text) async {
+  Future<List<TranslationResponse>> _translateString(
+      Locale locale, String text) async {
     final asaraacLocale = Locales.valueOf(locale.languageCode);
     List<TranslationResponse> translationResponses = [];
 
@@ -57,16 +59,30 @@ class ArasaacService {
     var index = 0;
     for (var part in parts) {
       try {
-        var customPictogram = await CustomPictogramRepository.instance.getFirstByKeyOrNull(part);
+        var customPictogram =
+            await CustomPictogramRepository.instance.getFirstByKeyOrNull(part);
         if (customPictogram != null) {
-          translationResponses.add(TranslationResponse(index: index++, text: part, customPictogramKey: customPictogram.key));
+          translationResponses.add(TranslationResponse(
+              index: index++,
+              text: part,
+              customPictogramKey: customPictogram.key));
           continue;
         }
 
-        var response = await _api.getPictogramsApi().bestSearchPictograms(language: asaraacLocale, searchText: part);
-        translationResponses.add(TranslationResponse(index: index++, text: part, pictogramId: response.data!.first.id));
+        var response = await _api
+            .getPictogramsApi()
+            .searchPictograms(language: asaraacLocale, searchText: part);
+        translationResponses.add(TranslationResponse(
+            index: index++,
+            text: part,
+            pictogramId: response.data!.first.id,
+            alternatives: response.data!
+                .map((e) => TranslationResponse(
+                    index: index++, text: part, pictogramId: e.id))
+                .toList()));
       } catch (e) {
-        translationResponses.add(TranslationResponse(index: index++, text: part, error: true));
+        translationResponses
+            .add(TranslationResponse(index: index++, text: part, error: true));
       }
     }
 

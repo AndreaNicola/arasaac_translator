@@ -23,5 +23,6 @@
   "savedTranslations": "Saved translations",
   "title": "ARASAAC translator",
   "editCustomPictogram": "Edit custom pictogram",
-  "appGuide" : "User guide"
+  "appGuide" : "User guide",
+  "editPictogram": "Edit pictogram"
 }

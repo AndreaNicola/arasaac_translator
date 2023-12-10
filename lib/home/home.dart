@@ -3,6 +3,7 @@ import 'package:arasaac_translator/arasaac/model.dart';
 import 'package:arasaac_translator/arasaac/service.dart';
 import 'package:arasaac_translator/custom_pictograms/custom_pictogram_repository.dart';
 import 'package:arasaac_translator/custom_pictograms/custom_pictograms_page.dart';
+import 'package:arasaac_translator/home/edit_pictogram_dialog.dart';
 import 'package:arasaac_translator/home/pictogram_card.dart';
 import 'package:arasaac_translator/print_service/print_service.dart';
 import 'package:arasaac_translator/saved_translations/saved_translations_page.dart';
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   final List<List<TranslationResponse>> _translationResponses = [];
 
-  static const double _cardSize = 125;
+  static const double _cardSize = 150;
   String translationName = "";
 
   @override
@@ -39,6 +40,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+
     var cardNumber = MediaQuery.of(context).size.width ~/ _cardSize;
 
     return Scaffold(
@@ -103,8 +106,8 @@ class _HomePageState extends State<HomePage> {
               leading: const Icon(Icons.info_outline),
               title: Text(AppLocalizations.of(context)!.about),
               onTap: () {
-                 PackageInfo.fromPlatform().then((packageInfo) {
-                   showAboutDialog(
+                PackageInfo.fromPlatform().then((packageInfo) {
+                  showAboutDialog(
                     context: context,
                     applicationName: packageInfo.appName,
                     applicationVersion: packageInfo.version,
@@ -123,7 +126,6 @@ class _HomePageState extends State<HomePage> {
                     ],
                   );
                 });
-
               },
             ),
           ],
@@ -190,8 +192,10 @@ class _HomePageState extends State<HomePage> {
               ),
               onChanged: (String value) {
                 EasyDebounce.debounce(
-                  'translation-debounce', // <-- An ID for this particular debouncer
-                  const Duration(milliseconds: 1000), // <-- The debounce duration
+                  'translation-debounce',
+                  // <-- An ID for this particular debouncer
+                  const Duration(milliseconds: 1000),
+                  // <-- The debounce duration
                   () async {
                     final Locale locale = Localizations.localeOf(context);
                     var translationResponses = await ArasaacService.instance.translateText(locale, _controller.text);
@@ -278,12 +282,21 @@ class _HomePageState extends State<HomePage> {
                                 }
                               },
                               onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => EditTextDialog(
-                                        title: AppLocalizations.of(context)!.editText,
-                                        initialText: _translationResponses[listIndex][gridIndex].text,
-                                        onSaved: (newText) => setState(() => _translationResponses[listIndex][gridIndex].text = newText)));
+                                var translationResponse = _translationResponses[listIndex][gridIndex];
+
+                                if (translationResponse.pictogramId != null) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => EditPictogramDialog(
+                                                translationResponse: _translationResponses[listIndex][gridIndex],
+                                                onSave: (newTranslationResponse) {
+                                                  setState(() {
+                                                    _translationResponses[listIndex][gridIndex] = newTranslationResponse;
+                                                  });
+                                                },
+                                              )));
+                                } else {}
                               },
                             ),
                           ),
