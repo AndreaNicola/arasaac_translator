@@ -4,7 +4,7 @@ import 'package:arasaac_translator/arasaac/model.dart';
 import 'package:arasaac_translator/custom_pictograms/custom_pictogram_repository.dart';
 import 'package:arasaac_translator/print_service/my_full_page.dart';
 import 'package:arasaac_translator/utils/arasaac_pictogram_uri.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -88,7 +88,7 @@ class PrintService {
     final dir = await getApplicationCacheDirectory();
     final file = File('${dir.path}/$fileName.pdf');
     await file.writeAsBytes(await pdf.save());
-    await OpenFile.open(file.path);
+    await OpenFilex.open(file.path);
   }
 
   Future<List<MyFullPage<Widget>>> _createFullPages({
