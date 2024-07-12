@@ -49,7 +49,7 @@ class _EditPictogramDialogState extends State<EditPictogramDialog> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: TextFormField(
               controller: textEditingController,
               inputFormatters: [
@@ -63,7 +63,7 @@ class _EditPictogramDialogState extends State<EditPictogramDialog> {
                 });
               },
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 labelText: AppLocalizations.of(context)!.editText,
               ),
             ),
