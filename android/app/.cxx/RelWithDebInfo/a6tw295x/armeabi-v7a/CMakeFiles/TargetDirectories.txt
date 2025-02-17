@@ -1,0 +1,2 @@
+C:/Users/Andrea/Documents/arasaac_translator/android/app/.cxx/RelWithDebInfo/a6tw295x/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Andrea/Documents/arasaac_translator/android/app/.cxx/RelWithDebInfo/a6tw295x/armeabi-v7a/CMakeFiles/rebuild_cache.dir

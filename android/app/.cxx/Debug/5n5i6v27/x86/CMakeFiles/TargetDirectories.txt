@@ -1,0 +1,2 @@
+C:/Users/Andrea/Documents/arasaac_translator/android/app/.cxx/Debug/5n5i6v27/x86/CMakeFiles/edit_cache.dir
+C:/Users/Andrea/Documents/arasaac_translator/android/app/.cxx/Debug/5n5i6v27/x86/CMakeFiles/rebuild_cache.dir
