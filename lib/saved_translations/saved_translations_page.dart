@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:arasaac_translator/arasaac/model.dart';
 import 'package:arasaac_translator/saved_translations/saved_translations_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:arasaac_translator/l10n/app_localizations.dart';
 
 import 'model.dart';
 

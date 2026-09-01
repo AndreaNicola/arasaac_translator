@@ -3,7 +3,7 @@ import 'package:arasaac_translator/custom_pictograms/edit_custom_pictogram_page.
 import 'package:arasaac_translator/custom_pictograms/model.dart';
 import 'package:arasaac_translator/home/pictogram_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:arasaac_translator/l10n/app_localizations.dart';
 
 /// A widget that displays a page for managing custom pictograms.
 ///

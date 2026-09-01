@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:arasaac_translator/l10n/app_localizations.dart';
 
 /// `EditTextDialog` is a StatefulWidget that displays a dialog for editing text.
 ///

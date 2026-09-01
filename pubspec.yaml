@@ -53,7 +53,7 @@ dependencies:
   open_filex:
     git:
       url: https://github.com/mufassalhussain/open_filex
-  package_info_plus: ^4.2.0
+  package_info_plus: ^10.2.1
 
 dev_dependencies:
   flutter_test:

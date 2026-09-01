@@ -3,7 +3,7 @@ import 'package:arasaac_translator/custom_pictograms/custom_pictogram_repository
 import 'package:arasaac_translator/custom_pictograms/model.dart';
 import 'package:arasaac_translator/home/pictogram_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:arasaac_translator/l10n/app_localizations.dart';
 
 class ConfirmCustomPictogramSave extends StatefulWidget {
   final Function onConfirm;
