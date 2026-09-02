@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:arasaac_translator/custom_pictograms/model.dart';
-import 'package:flutter/material.dart';
 import 'package:arasaac_translator/l10n/app_localizations.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker_android/image_picker_android.dart';
+import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 
 /// Represents a page for editing custom pictograms.
 ///
@@ -19,13 +20,14 @@ class EditCustomPictogramPage extends StatefulWidget {
   /// The [onSave] parameter is a callback function that is called when the user
   /// saves the pictogram. It receives the id of the pictogram (which can be null
   /// for a new pictogram), the key of the pictogram, and the image bytes of the pictogram.
-  const EditCustomPictogramPage({super.key, required this.customPictogram, required this.onSave});
+  const EditCustomPictogramPage(
+      {super.key, required this.customPictogram, required this.onSave});
 
   /// The pictogram to be edited. Can be null for a new pictogram.
   final CustomPictogram? customPictogram;
 
   /// The callback function to be called when the user saves the pictogram.
-  final Function(String key, Uint8List? imageBytes, int? arasaacId ) onSave;
+  final Function(String key, Uint8List? imageBytes, int? arasaacId) onSave;
 
   /// Creates the mutable state for this widget at a given location in the tree.
   @override
@@ -39,9 +41,6 @@ class EditCustomPictogramPage extends StatefulWidget {
 /// picking images, a [TextEditingController] for controlling the text field,
 /// and a byte array for the image data.
 class _EditCustomPictogramPageState extends State<EditCustomPictogramPage> {
-  /// An [ImagePicker] for picking images.
-  final ImagePicker _picker = ImagePicker();
-
   /// A [TextEditingController] for controlling the text field.
   final TextEditingController _keyController = TextEditingController();
 
@@ -70,9 +69,25 @@ class _EditCustomPictogramPageState extends State<EditCustomPictogramPage> {
   /// This method picks an image from the specified [ImageSource], reads it as
   /// bytes, and updates the state with the image bytes.
   void _pickImage(ImageSource imageSource) {
-    _picker.pickImage(source: imageSource, maxWidth: 300, maxHeight: 300, imageQuality: 95, preferredCameraDevice: CameraDevice.rear).then((value) {
+    final ImagePickerPlatform pickerImplementation =
+        ImagePickerPlatform.instance;
+    if (pickerImplementation is ImagePickerAndroid) {
+      pickerImplementation.useAndroidPhotoPicker = true;
+    }
+
+    pickerImplementation
+        .getImageFromSource(
+            source: imageSource,
+            options: const ImagePickerOptions(
+                maxWidth: 300,
+                maxHeight: 300,
+                imageQuality: 95,
+                preferredCameraDevice: CameraDevice.rear))
+        .then((value) {
       if (value != null) {
-        value.readAsBytes().then((value) => setState(() => _imageBytes = value));
+        value
+            .readAsBytes()
+            .then((value) => setState(() => _imageBytes = value));
       }
     });
   }
@@ -93,7 +108,10 @@ class _EditCustomPictogramPageState extends State<EditCustomPictogramPage> {
         },
         child: const Icon(Icons.save),
       ),
-      appBar: AppBar(title: widget.customPictogram == null ? Text(AppLocalizations.of(context)!.newCustomPictogram) : Text(AppLocalizations.of(context)!.editCustomPictogram)),
+      appBar: AppBar(
+          title: widget.customPictogram == null
+              ? Text(AppLocalizations.of(context)!.newCustomPictogram)
+              : Text(AppLocalizations.of(context)!.editCustomPictogram)),
       body: ListView(
         padding: const EdgeInsets.all(8),
         children: [
